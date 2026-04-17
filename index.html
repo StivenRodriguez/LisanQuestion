@@ -627,10 +627,11 @@ function renderQuestion() {
         const isOtro = idx === allOpts.length - 1;
         const isSel = isOtro ? otroSel : saved === o;
         const safeO = o.replace(/'/g, "\\'");
-        return `<label class="opt-label ${isSel?'selected':''}" role="radio" aria-checked="${isSel?'true':'false'}" tabindex="0" onclick="selectOpt(this,'${key}','${safeO}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+        return `<label class="opt-label ${isSel?'selected':''}" role="radio" aria-checked="${isSel?'true':'false'}" tabindex="0" onclick="selectOpt(this,'${key}','${safeO}')" onkeydown="if(event.target.tagName==='INPUT')return; if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
           <input type="radio" name="${key}" value="${o}" tabindex="-1"><span class="opt-dot" aria-hidden="true"></span>${o}
           ${isOtro ? `<input type="text" class="otro-txt" id="otro-${key}" placeholder="Escribe aquí..."
             value="${savedOtro}" onclick="event.stopPropagation()"
+            onkeydown="event.stopPropagation()"
             oninput="saveOtro('${key}',this.value)"
             aria-label="Escribe tu respuesta personalizada"
             style="display:${isSel?'block':'none'}">` : ''}
