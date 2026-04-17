@@ -32,7 +32,7 @@
 
   .progress-wrap{background:white;border-radius:12px;padding:14px 18px;margin-bottom:1.5rem;border:1px solid var(--border)}
   .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .progress-label{font-size:13px;font-weight:500;color:var(--text)}
+  .progress-label{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:65%}
   .progress-pct{font-size:13px;color:var(--muted)}
   .progress-bar{height:5px;background:var(--gray-l);border-radius:3px;overflow:hidden}
   .progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),#42A5F5);border-radius:3px;transition:width .4s ease}
@@ -240,7 +240,45 @@
   }
   .btn-wow:hover .btn-wow-arrow { transform: translateX(4px); }
 
-    @media(max-width:560px){.splash-cards{grid-template-columns:1fr}.splash-title{font-size:24px}}.splash-hero{padding:2rem 1.5rem 1.8rem}  @media(max-width:480px){.area-grid{grid-template-columns:1fr}.header{padding:1.5rem}.header h1{font-size:19px}}
+
+  /* ── Responsive ── */
+  @media(max-width:640px) {
+    body { padding: 1rem 0.75rem 3rem; }
+
+    /* Splash */
+    .splash-hero { padding: 2rem 1.5rem 1.8rem; border-radius: 16px; }
+    .splash-title { font-size: 24px; }
+    .splash-lead { font-size: 14px; }
+    .splash-cards { grid-template-columns: 1fr; gap: 8px; }
+    .splash-quote p { font-size: 13px; }
+    .btn-wow { width: 100%; justify-content: center; padding: 14px 24px; }
+
+    /* Form */
+    .area-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .area-card { padding: 12px 8px; font-size: 12px; }
+    .card { padding: 1.1rem; }
+    .card-q { font-size: 14px; }
+    .opt-label { font-size: 13px; padding: 10px 12px; }
+
+    /* Scale — 5 buttons side by side on narrow screens */
+    .scale-btn { height: 40px; font-size: 13px; }
+
+    /* Navigation */
+    .nav { gap: 8px; }
+    .btn { padding: 10px 16px; font-size: 13px; }
+    .btn-primary { max-width: none; flex: 1; }
+
+    /* Done */
+    .done-screen { padding: 2rem 1.25rem; }
+  }
+
+  @media(max-width:400px) {
+    .splash-title { font-size: 21px; }
+    .area-grid { grid-template-columns: 1fr; }
+    .scale-row { gap: 5px; }
+    .scale-btn { height: 38px; font-size: 12px; }
+    .btn-wow { font-size: 14px; }
+  }
 </style>
 </head>
 <body>
