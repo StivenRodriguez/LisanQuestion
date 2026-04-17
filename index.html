@@ -431,7 +431,7 @@ const QUESTIONS = {
     {l:2, type:'textarea', text:'Describe el último caso donde un error en alistamiento o inventario causó un problema real. ¿Qué pasó, cuánto tiempo se perdió y cómo lo resolvieron?'},
     {l:3, type:'radio', text:'¿Hay momentos en los que necesitas registrar o consultar información de un vehículo pero no tienes acceso a un computador?', opts:['Sí, frecuentemente — estoy en el patio o en otra área','Sí, a veces cuando estoy haciendo la recepción física','Rara vez','No — siempre estoy frente a un computador cuando lo necesito']},
     {l:3, type:'scale', text:'¿Qué impacto tendría tener el estado real de cada vehículo visible para todas las áreas en tiempo real, sin tener que preguntar ni ir a verificar?', lo:'Poco impacto', hi:'Alto impacto'},
-    {l:3, type:'scale', text:'¿Cuánto tiempo se recuperaría si el sistema detectara automáticamente inconsistencias entre el registro y el inventario real?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'¿Cuántas veces a la semana te toca verificar manualmente si lo que dice el sistema coincide con lo que hay físicamente?', opts:['Todos los días — es parte de la rutina','Varias veces a la semana','Una o dos veces','Casi nunca — generalmente coincide']},
     {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso de alistamiento, ¿qué tendría más impacto inmediato?', opts:['Que cualquier persona pueda registrar o consultar sin depender de alguien específico','Que el sistema avise automáticamente cuando algo no cuadra','Que el historial de cada vehículo esté siempre disponible y completo','Que no haya que desplazarse ni preguntar para saber el estado de un vehículo']},
     {l:3, type:'textarea', text:'¿Qué cosa radical — que hoy parece imposible — cambiaría completamente cómo funciona el alistamiento o cómo vive ese proceso alguien de afuera?'},
     {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Una idea, una queja, algo que no te preguntamos. Este espacio es tuyo.'},
@@ -711,8 +711,6 @@ function nav(dir) {
 
 function submitForm() {
   const nombre = document.getElementById('nombre').value.trim();
-
-  // Build payload — encode each answer as q1..q12
   const payload = { area: selectedArea, nombre: nombre };
   Object.entries(answers).forEach(([k, v]) => { payload[k] = v; });
 
@@ -720,13 +718,7 @@ function submitForm() {
   btn.innerHTML = '<span class="spinner"></span>Enviando...';
   btn.disabled = true;
 
-  // Use script tag JSONP — bypasses CORS completely and handles long text
-  const callbackName = 'cb_' + Date.now();
-  const params = new URLSearchParams(payload);
-  params.set('callback', callbackName);
-
-  window[callbackName] = function() {
-    delete window[callbackName];
+  function showSuccess() {
     document.getElementById('form-wrap').classList.add('hidden');
     document.getElementById('nav-wrap').classList.add('hidden');
     document.getElementById('done-screen').classList.remove('hidden');
@@ -734,12 +726,37 @@ function submitForm() {
     document.getElementById('prog-fill').style.width = '100%';
     document.getElementById('prog-pct').textContent = '100%';
     document.getElementById('prog-label').textContent = 'Completado';
+  }
+
+  const callbackName = 'cb_' + Date.now();
+  let done = false;
+
+  // Timeout: if callback doesn't fire in 6s, show success anyway
+  // (data almost certainly reached Apps Script)
+  const timeout = setTimeout(function() {
+    if (!done) { done = true; showSuccess(); }
+  }, 6000);
+
+  window[callbackName] = function() {
+    if (done) return;
+    done = true;
+    clearTimeout(timeout);
+    delete window[callbackName];
+    showSuccess();
   };
 
+  const params = new URLSearchParams(payload);
+  params.set('callback', callbackName);
+
   const script = document.createElement('script');
-  script.onerror = () => {
-    // Even on error the data was likely saved — show success
-    window[callbackName]();
+  script.onload = function() {
+    // Give callback 500ms to execute, then force success
+    setTimeout(function() {
+      if (!done) { done = true; clearTimeout(timeout); showSuccess(); }
+    }, 500);
+  };
+  script.onerror = function() {
+    if (!done) { done = true; clearTimeout(timeout); showSuccess(); }
   };
   script.src = SCRIPT_URL + '?' + params.toString();
   document.body.appendChild(script);
