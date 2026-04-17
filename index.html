@@ -144,7 +144,7 @@
 
   <div class="nav" id="nav-wrap">
     <button class="btn" id="btn-back" onclick="nav(-1)" disabled>Anterior</button>
-    <button class="btn btn-primary" id="btn-next" onclick="nav(1)">Siguiente</button>
+    <button class="btn btn-primary" id="btn-next" onclick="nav(1)">Comenzar</button>
   </div>
 
   <div class="done-screen hidden" id="done-screen">
@@ -173,6 +173,8 @@ const QUESTIONS = {
     {l:3, type:'radio', text:'¿Qué información del vehículo hoy se pierde o no queda registrada en ningún lado?', opts:['Estado físico y evidencia de entrada','Historial de movimientos internos','Quién fue responsable de cada etapa','Todo lo anterior']},
     {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso de inventario, ¿qué tendría más impacto real en la operación?', opts:['Que el registro sea inmediato sin importar dónde estés','Que todas las áreas vean el mismo estado en tiempo real','Que no dependa de una persona específica para funcionar','Que quede evidencia física y documental de cada movimiento']},
     {l:3, type:'textarea', text:'Si pudieras hacer algo radical — algo que hoy parece imposible — que cambiara completamente cómo funciona el inventario o cómo vive el proceso alguien externo (el vendedor del vehículo, por ejemplo), ¿qué sería?'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos? Una idea, una opini\u00f3n, algo que no te preguntamos. Este espacio es tuyo.'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos \u2014 una idea, una opini\u00f3n, algo que no te preguntamos o que siempre quisiste decir sobre c\u00f3mo funciona esta \u00e1rea? Este espacio es tuyo.'},
   ],
   'Compra de Vehículos': [
     {l:1, type:'radio', text:'¿Cuántas negociaciones activas pueden manejar al tiempo antes de que alguna quede sin seguimiento?', opts:['Más de 10 sin problema','Entre 5 y 10','Menos de 5','No hay un límite claro — a veces se pierden']},
@@ -187,6 +189,7 @@ const QUESTIONS = {
     {l:3, type:'radio', text:'¿Cuál es el cuello de botella más grande en el proceso de compra hoy?', opts:['Coordinación entre áreas','Documentación incompleta','Seguimiento a negociaciones activas','Validación de pagos']},
     {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso de compra, ¿qué tendría más impacto real?', opts:['Visibilidad en tiempo real de cada negociación','Documentación que fluye sola entre áreas','Seguimiento automático sin depender de memoria','Historial completo de cada vendedor o propietario']},
     {l:3, type:'textarea', text:'Si el vendedor del vehículo pudiera hacer seguimiento en tiempo real del estado de su proceso — saber en qué etapa está su vehículo sin tener que llamar — ¿qué cambiaría en tu día a día y en la experiencia de ese cliente?'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos? Una idea, una opini\u00f3n, algo que no te preguntamos. Este espacio es tuyo.'},
   ],
   'Coordinación de Créditos': [
     {l:1, type:'radio', text:'¿Cuántas solicitudes activas pueden manejar al tiempo antes de que alguna quede sin seguimiento?', opts:['Más de 15 sin problema','Entre 8 y 15','Menos de 8','No hay límite claro — a veces se pierden']},
@@ -201,6 +204,7 @@ const QUESTIONS = {
     {l:3, type:'radio', text:'¿Qué cambio en el proceso de créditos tendría más impacto inmediato?', opts:['Detección automática de errores documentales','Seguimiento automático por caso','Historial unificado del cliente','Visibilidad en tiempo real de todos los casos']},
     {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué eliminaría más reprocesos hoy?', opts:['Que los documentos se validen solos antes de enviarse','Que cada caso tenga su historial completo sin buscarlo','Que el sistema avise cuando un caso lleva mucho tiempo sin avanzar','Que el cliente pueda cargar sus documentos directamente']},
     {l:3, type:'textarea', text:'Si el cliente pudiera hacer seguimiento del estado de su crédito sin tener que llamar — saber en qué etapa está, qué falta y cuánto tarda — ¿qué cambiaría en tu trabajo y en la experiencia del cliente?'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos? Una idea, una opini\u00f3n, algo que no te preguntamos. Este espacio es tuyo.'},
   ],
   'Contabilidad': [
     {l:1, type:'radio', text:'¿Cuánto tiempo del mes se va en consolidar información que debería llegar sola desde otras áreas?', opts:['Más de 3 días','1 a 3 días','Menos de 1 día','Es mínimo — fluye bien']},
@@ -215,6 +219,7 @@ const QUESTIONS = {
     {l:3, type:'radio', text:'¿Qué eliminaría más reprocesos en contabilidad hoy?', opts:['Información en tiempo real desde otras áreas','Validación automática antes de que llegue el dato','Reportes automáticos sin consolidar a mano','Trazabilidad completa de cada movimiento']},
     {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué tendría más impacto en la calidad de la información contable?', opts:['Que ningún movimiento pueda registrarse sin los datos mínimos requeridos','Que contabilidad vea en tiempo real lo que pasa en cada área','Que los reportes se generen solos al cierre del mes','Que cada error tenga un responsable claro y trazable']},
     {l:3, type:'textarea', text:'¿Qué le pedirías al sistema nuevo que hoy es imposible tener — algo que cambiaría radicalmente cómo funciona contabilidad o cómo interactúa con las demás áreas?'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos \u2014 una idea, una opini\u00f3n, algo que no te preguntamos o que siempre quisiste decir sobre c\u00f3mo funciona esta \u00e1rea? Este espacio es tuyo.'},
   ],
   'Trámites': [
     {l:1, type:'radio', text:'¿Cuántos vehículos en trámite hoy tienen algún documento vencido o próximo a vencer sin que nadie lo haya detectado todavía?', opts:['No tengo esa información disponible fácilmente','Probablemente varios — no hay alertas','Uno o dos — me doy cuenta tarde','Ninguno — tengo control claro']},
@@ -229,6 +234,8 @@ const QUESTIONS = {
     {l:3, type:'radio', text:'¿Qué cambio en trámites evitaría más retrasos hoy?', opts:['Alertas automáticas por vencimientos','Expediente digital unificado por vehículo','Notificaciones automáticas entre áreas','Validación obligatoria antes de avanzar cada etapa']},
     {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué haría que los trámites fluyeran sin depender de que una persona específica esté disponible?', opts:['Que el historial completo esté accesible para cualquiera','Que el sistema avise automáticamente qué sigue','Que los documentos estén digitalizados y accesibles desde cualquier lugar','Que nadie pueda avanzar sin completar lo requerido en la etapa anterior']},
     {l:3, type:'textarea', text:'Si el propietario del vehículo pudiera saber en qué etapa del trámite está su vehículo sin tener que llamar, ¿qué cambiaría en tu trabajo? ¿Qué otras ideas radicales tienes para este módulo?'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos? Una idea, una opini\u00f3n, algo que no te preguntamos. Este espacio es tuyo.'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos \u2014 una idea, una opini\u00f3n, algo que no te preguntamos o que siempre quisiste decir sobre c\u00f3mo funciona esta \u00e1rea? Este espacio es tuyo.'},
   ],
   'Tesorería': [
     {l:1, type:'radio', text:'¿Con qué frecuencia llega una solicitud de pago con documentación incompleta o incorrecta?', opts:['Varias veces a la semana','Al menos una vez a la semana','Rara vez','Nunca']},
@@ -243,6 +250,7 @@ const QUESTIONS = {
     {l:3, type:'radio', text:'¿Qué cambio en tesorería tendría más impacto inmediato?', opts:['Bloqueo automático si falta documento','Registro automático en contabilidad','Visibilidad en tiempo real de pagos pendientes','Trazabilidad completa por transacción']},
     {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué eliminaría más errores en tesorería hoy?', opts:['Que ningún pago avance sin documentación completa','Que el flujo de caja sea visible en tiempo real','Que cada aprobación quede registrada con quién y cuándo','Que contabilidad reciba la información sola sin intermediarios']},
     {l:3, type:'textarea', text:'¿Qué cosa radical — que hoy parece difícil o imposible — cambiaría completamente cómo funciona tesorería o cómo interactúa con las otras áreas?'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos \u2014 una idea, una opini\u00f3n, algo que no te preguntamos o que siempre quisiste decir sobre c\u00f3mo funciona esta \u00e1rea? Este espacio es tuyo.'},
   ],
   'Gerencia Comercial': [
     {l:1, type:'radio', text:'¿Cuántas veces al mes toma decisiones con información que luego resultó estar desactualizada o incorrecta?', opts:['Varias veces al mes','Al menos una vez','Rara vez','Nunca']},
@@ -257,6 +265,7 @@ const QUESTIONS = {
     {l:3, type:'radio', text:'¿Qué información cambiaría más la forma en que gestiona el negocio hoy?', opts:['Rentabilidad real por vehículo','Tiempos por etapa del proceso','Estado de cada área en tiempo real','Proyección de flujo según el estado actual del inventario']},
     {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué le daría más control sobre el negocio?', opts:['Ver todo en tiempo real sin esperar reportes','Saber dónde se pierde tiempo y dinero en el proceso','Tener proyecciones basadas en datos reales','Que las alertas lleguen solas cuando algo sale de lo normal']},
     {l:3, type:'textarea', text:'¿Qué decisión que hoy no puede tomar bien podría tomar si tuviera los datos correctos en el momento correcto? ¿Y qué cosa radical — que hoy parece imposible — cambiaría completamente cómo se gestiona el negocio?'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos \u2014 una idea, una opini\u00f3n, algo que no te preguntamos o que siempre quisiste decir sobre c\u00f3mo funciona esta \u00e1rea? Este espacio es tuyo.'},
   ],
   'Área Comercial': [
     {l:1, type:'radio', text:'¿Cuántas oportunidades de venta se pierden al mes porque la información no estaba disponible a tiempo?', opts:['Más de 3','1 o 2','Rara vez','Nunca — siempre tengo la info']},
@@ -271,6 +280,7 @@ const QUESTIONS = {
     {l:3, type:'radio', text:'¿Qué cambio en ventas tendría más impacto inmediato?', opts:['Tener el inventario actualizado accesible siempre','Historial completo de cada cliente en un lugar','Recordatorio automático de seguimiento a prospectos','Saber qué vehículos generan más interés y por qué']},
     {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué te haría cerrar más negocios con el mismo esfuerzo?', opts:['Tener toda la información disponible cuando estoy con el cliente','No perder ningún prospecto por falta de seguimiento','Conocer el historial completo del cliente antes de llamarle','Saber en tiempo real qué vehículos están disponibles para ofrecer']},
     {l:3, type:'textarea', text:'Si el cliente que está comprando pudiera ver en tiempo real el estado de su proceso — en qué etapa está su vehículo, qué falta, cuándo estará listo — ¿qué cambiaría en tu trabajo y en la experiencia de ese cliente?'},
+    {l:3, type:'textarea', text:'\u00bfHay algo m\u00e1s que quieras contarnos? Una idea, una opini\u00f3n, algo que no te preguntamos. Este espacio es tuyo.'},
   ],
 };
 
@@ -301,9 +311,16 @@ function updateProgress() {
     document.getElementById('prog-label').textContent =
       LEVELS[q.l] + ' — pregunta ' + currentStep + ' de ' + questions.length;
   }
+  const btnNext = document.getElementById('btn-next');
+  btnNext.disabled = false;
   document.getElementById('btn-back').disabled = currentStep === 0;
-  document.getElementById('btn-next').textContent =
-    currentStep === questions.length ? 'Enviar respuestas' : 'Siguiente';
+  if (currentStep === 0) {
+    btnNext.textContent = 'Comenzar';
+  } else if (currentStep === questions.length) {
+    btnNext.textContent = 'Enviar respuestas';
+  } else {
+    btnNext.textContent = 'Siguiente';
+  }
 }
 
 function renderQuestion() {
@@ -420,8 +437,11 @@ function resetForm() {
   document.getElementById('nav-wrap').classList.remove('hidden');
   document.getElementById('done-screen').classList.add('hidden');
 
+  const btn = document.getElementById('btn-next');
+  btn.disabled = false;
+  btn.textContent = 'Comenzar';
+
   document.getElementById('btn-back').disabled = true;
-  document.getElementById('btn-next').textContent = 'Siguiente';
 
   updateProgress();
   window.scrollTo({ top: 0, behavior: 'smooth' });
