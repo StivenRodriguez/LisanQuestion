@@ -401,15 +401,15 @@
       <p>Tu aporte ya hace parte de lo que vamos a construir. Esto no es una encuesta que va a un cajón — va directo al diseño del sistema.<br><br>
       <strong style="color:#FF6600">Estamos construyendo esto en equipo. Gracias por ser parte.</strong></p>
     </div>
-    <div class="done-body">
+    <div class="done-body" id="done-body">
       <div class="done-divider">
         <div class="done-divider-line"></div>
         <div class="done-divider-text">Una última cosa</div>
         <div class="done-divider-line"></div>
       </div>
-      <label class="done-extra-label">¿Hay algo del negocio que quieras que sepamos — una idea, una queja, algo que siempre quisiste decir y nunca fue el momento?</label>
+      <label class="done-extra-label" for="done-extra-txt">¿Hay algo del negocio que quieras que sepamos — una idea, una queja, algo que siempre quisiste decir y nunca fue el momento?</label>
       <textarea class="done-extra" id="done-extra-txt" placeholder="Escribe aquí con total libertad. No hay respuesta incorrecta. Puede ser algo de tu área, de otra área, o del negocio en general..." maxlength="1000"></textarea>
-      <div class="done-extra-hint">Opcional — pero lo más valioso a veces sale aquí.</div>
+      <div class="done-extra-hint" id="done-extra-hint">Opcional — pero lo más valioso a veces sale aquí.</div>
       <div class="done-actions">
         <button class="btn-reset" onclick="resetForm()">Llenar otra respuesta</button>
         <button class="btn-send-extra" id="btn-send-extra" onclick="sendExtra()">Enviar comentario →</button>
@@ -420,7 +420,7 @@
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby3P3RbTJn3U7FxcBb369f60wmg_VhpSElDkNSmqNjtyNw8UTNq829TSdMvZD68xEpGFA/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-Kn99yIeQP_IqUn3_4D1Yp_iL_gbrk1qJMr11Qs8fHOV9MOjKJIx0sYgeycVCJTPSEg/exec';
 
 const QUESTIONS = {
   'Alistamiento': [
@@ -853,8 +853,25 @@ function resetForm() {
   document.getElementById('nav-wrap').style.display = 'flex';
   document.getElementById('done-screen').classList.add('hidden');
   document.getElementById('progress-wrap').style.display = 'block';
-  const ex = document.getElementById('done-extra-txt'); if(ex) ex.value='';
-  const bx = document.getElementById('btn-send-extra'); if(bx){bx.disabled=false;bx.textContent='Enviar comentario →';}
+
+  // Restaurar el done-body por si se había reemplazado con el mensaje de gracias.
+  const body = document.getElementById('done-body');
+  if (body) {
+    body.innerHTML = `
+      <div class="done-divider">
+        <div class="done-divider-line"></div>
+        <div class="done-divider-text">Una última cosa</div>
+        <div class="done-divider-line"></div>
+      </div>
+      <label class="done-extra-label" for="done-extra-txt">¿Hay algo del negocio que quieras que sepamos — una idea, una queja, algo que siempre quisiste decir y nunca fue el momento?</label>
+      <textarea class="done-extra" id="done-extra-txt" placeholder="Escribe aquí con total libertad. No hay respuesta incorrecta. Puede ser algo de tu área, de otra área, o del negocio en general..." maxlength="1000"></textarea>
+      <div class="done-extra-hint" id="done-extra-hint">Opcional — pero lo más valioso a veces sale aquí.</div>
+      <div class="done-actions">
+        <button class="btn-reset" onclick="resetForm()">Llenar otra respuesta</button>
+        <button class="btn-send-extra" id="btn-send-extra" onclick="sendExtra()">Enviar comentario →</button>
+      </div>
+    `;
+  }
 
   document.getElementById('btn-back').disabled = true;
   const btnN = document.getElementById('btn-next');
@@ -865,41 +882,28 @@ function resetForm() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function showFinalThanks() {
-  document.getElementById('done-body').innerHTML = `
-    <div style="text-align:center;padding:1.5rem 0 0.5rem">
-      <div style="font-size:36px;margin-bottom:16px">🙌</div>
-      <h3 style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:10px">¡Gracias por tu tiempo y tu confianza!</h3>
-      <p style="font-size:14px;color:var(--muted);line-height:1.75;max-width:380px;margin:0 auto 1.75rem">
-        Cada respuesta que llega nos acerca más a construir algo que realmente funcione para el equipo.<br>
-        <strong style="color:var(--orange)">Esto lo estamos haciendo juntos.</strong>
-      </p>
-      <button class="btn-reset" onclick="resetForm()" style="padding:13px 32px;border-radius:50px;font-size:14px;font-weight:500;border:2px solid var(--navy);color:var(--navy);background:white;cursor:pointer;transition:all .15s"
-        onmouseover="this.style.background='var(--navy)';this.style.color='white'"
-        onmouseout="this.style.background='white';this.style.color='var(--navy)'">
-        Llenar otra respuesta
-      </button>
-    </div>
-  `;
-}
-
 function showDone() {
   const nombre = document.getElementById('nombre').value.trim().split(' ')[0];
   document.getElementById('done-nombre').textContent = nombre || 'gracias';
 }
 
 async function sendExtra() {
-  const txt = document.getElementById('done-extra-txt').value.trim();
+  const ta = document.getElementById('done-extra-txt');
   const btn = document.getElementById('btn-send-extra');
+  const hint = document.getElementById('done-extra-hint');
+  const txt = ta.value.trim();
+
   if (!txt) {
     btn.textContent = 'Escribe algo primero 😊';
     setTimeout(() => btn.textContent = 'Enviar comentario →', 2000);
     return;
   }
-  const originalText = 'Enviar comentario →';
+
   btn.disabled = true;
   btn.setAttribute('aria-busy', 'true');
   btn.textContent = 'Enviando...';
+  hint.style.color = '';
+  hint.textContent = 'Opcional — pero lo más valioso a veces sale aquí.';
 
   const payload = {
     tipo: 'comentario_final',
@@ -914,17 +918,34 @@ async function sendExtra() {
       mode: 'no-cors',
       body: new URLSearchParams(payload),
     });
-    showFinalThanks();
+    renderThanksAfterExtra();
   } catch (err) {
     btn.disabled = false;
     btn.removeAttribute('aria-busy');
     btn.textContent = 'Reintentar envío';
-    const hint = document.querySelector('.done-extra-hint');
-    if (hint) {
-      hint.textContent = 'No pudimos enviar tu comentario. Revisa tu conexión e intenta de nuevo.';
-      hint.style.color = '#DC2626';
-    }
+    hint.textContent = 'No pudimos enviar tu comentario. Revisa tu conexión e intenta de nuevo.';
+    hint.style.color = '#DC2626';
   }
+}
+
+function renderThanksAfterExtra() {
+  const body = document.getElementById('done-body');
+  if (!body) return;
+  body.innerHTML = `
+    <div style="text-align:center;padding:1rem 0 0.25rem">
+      <div style="font-size:34px;margin-bottom:14px" aria-hidden="true">🙌</div>
+      <h3 style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:10px">¡Gracias por tu tiempo y tu confianza!</h3>
+      <p style="font-size:14px;color:var(--muted);line-height:1.75;max-width:380px;margin:0 auto 1.5rem">
+        Cada respuesta que llega nos acerca más a construir algo que realmente funcione para el equipo.<br>
+        <strong style="color:var(--orange)">Esto lo estamos haciendo juntos.</strong>
+      </p>
+      <button class="btn-reset" onclick="resetForm()" style="padding:13px 32px;border-radius:50px;font-size:14px;font-weight:500;border:2px solid var(--navy);color:var(--navy);background:white;cursor:pointer;transition:all .15s"
+        onmouseover="this.style.background='var(--navy)';this.style.color='white'"
+        onmouseout="this.style.background='white';this.style.color='var(--navy)'">
+        Llenar otra respuesta
+      </button>
+    </div>
+  `;
 }
 
 function startSurvey() {
