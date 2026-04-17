@@ -3,14 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Levantamiento de Requisitos — Lisan Motors SAS</title>
+<title>Lisan Motors — Tu voz construye lo que viene</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy:#0D2137; --blue:#1565C0; --blue-mid:#1E88E5;
-    --blue-l:#E8F2FC; --pur:#4A148C; --pur-l:#F3E5F5;
-    --grn:#1B5E20; --grn-l:#E8F5E9; --gray:#546E7A;
-    --gray-l:#F4F6F8; --white:#FFFFFF; --border:#DDE3EA;
+    --navy:#162363;
+    --blue:#1E3A8A;
+    --blue-mid:#2563EB;
+    --blue-l:#EEF2FF;
+    --red:#CC1111;
+    --red-l:#FEF2F2;
+    --orange:#FF6600;
+    --orange-l:#FFF7ED;
+    --grn:#1B5E20; --grn-l:#E8F5E9;
+    --gray:#546E7A; --gray-l:#F4F6F8;
+    --white:#FFFFFF; --border:#DDE3EA;
     --text:#1A2332; --muted:#6B7A8D;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -31,54 +38,54 @@
   .progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),#42A5F5);border-radius:3px;transition:width .4s ease}
 
   .section-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:1rem}
-  .tag-id{background:#E8EAF6;color:#283593}
+  .tag-id{background:var(--blue-l);color:var(--navy)}
   .tag-lv1{background:var(--blue-l);color:#0D47A1}
   .tag-lv2{background:var(--pur-l);color:#6A1B9A}
   .tag-lv3{background:var(--grn-l);color:#1B5E20}
 
   .card{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem;transition:border-color .2s,box-shadow .2s}
-  .card:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,101,192,.08)}
+  .card:focus-within{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,102,0,.08)}
   .card-num{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-bottom:8px}
   .card-q{font-size:15px;font-weight:500;color:var(--text);line-height:1.55;margin-bottom:1rem}
 
   .options{display:flex;flex-direction:column;gap:8px}
   .opt-label{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-size:14px;color:var(--text);transition:all .15s;user-select:none}
-  .opt-label:hover{background:var(--blue-l);border-color:#90CAF9}
+  .opt-label:hover{background:var(--blue-l);border-color:#93C5FD}
   .opt-label input[type=radio]{display:none}
-  .opt-label.selected{background:var(--blue-l);border-color:var(--blue);color:#0D47A1;font-weight:500}
+  .opt-label.selected{background:var(--orange-l);border-color:var(--orange);color:#C2410C;font-weight:500}
   .opt-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
-  .opt-label.selected .opt-dot{border-color:var(--blue);background:var(--blue)}
+  .opt-label.selected .opt-dot{border-color:var(--orange);background:var(--orange)}
   .opt-label.selected .opt-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:white}
 
   /* Area selector grid */
   .area-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .area-card{padding:14px;border-radius:12px;border:1px solid var(--border);cursor:pointer;font-size:13px;font-weight:500;color:var(--text);text-align:center;transition:all .15s;background:white;line-height:1.4}
-  .area-card:hover{background:var(--blue-l);border-color:#90CAF9}
-  .area-card.selected{background:var(--blue-l);border-color:var(--blue);color:#0D47A1}
+  .area-card:hover{background:var(--blue-l);border-color:#93C5FD}
+  .area-card.selected{background:var(--orange-l);border-color:var(--orange);color:#C2410C}
 
   input[type=text]{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--gray-l);transition:border-color .2s}
-  input[type=text]:focus{outline:none;border-color:var(--blue);background:white}
+  input[type=text]:focus{outline:none;border-color:var(--orange);background:white}
   label.field-label{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block}
 
   textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);resize:vertical;min-height:90px;line-height:1.6;transition:border-color .2s;background:var(--gray-l)}
-  textarea:focus{outline:none;border-color:var(--blue);background:white}
+  textarea:focus{outline:none;border-color:var(--orange);background:white}
   .char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:6px}
 
   .scale-row{display:flex;gap:8px}
   .scale-btn{flex:1;height:44px;border-radius:10px;border:1px solid var(--border);background:var(--gray-l);font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
   .scale-btn:hover{background:var(--blue-l);border-color:#90CAF9;color:var(--blue)}
-  .scale-btn.selected{background:var(--blue);border-color:var(--blue);color:white}
+  .scale-btn.selected{background:var(--navy);border-color:var(--navy);color:white}
   .scale-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
 
   .nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:12px}
   .btn{padding:10px 24px;border-radius:10px;font-size:14px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:1px solid var(--border);background:white;color:var(--text);transition:all .15s}
   .btn:hover{background:var(--gray-l)}
   .btn:disabled{opacity:.35;cursor:not-allowed}
-  .btn-primary{background:var(--blue);border-color:var(--blue);color:white;flex:1;max-width:220px}
-  .btn-primary:hover{background:#0D47A1}
+  .btn-primary{background:var(--navy);border-color:var(--navy);color:white;flex:1;max-width:220px}
+  .btn-primary:hover{background:#0D1744}
 
   .done-screen{background:white;border-radius:16px;border:1px solid var(--border);padding:3rem 2rem;text-align:center}
-  .done-icon{width:64px;height:64px;border-radius:50%;background:var(--grn-l);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:28px;color:#2E7D32;font-weight:600}
+  .done-icon{width:64px;height:64px;border-radius:50%;background:var(--orange-l);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:28px;color:var(--orange);font-weight:600}
   .done-screen h2{font-size:22px;font-weight:600;margin-bottom:8px}
   .done-screen p{font-size:14px;color:var(--muted);line-height:1.7;max-width:400px;margin:0 auto 2rem}
   .btn-reset{padding:12px 28px;border-radius:10px;font-size:14px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:1px solid var(--blue);background:var(--blue-l);color:var(--blue);transition:all .15s;display:inline-block}
@@ -87,19 +94,159 @@
   .hidden{display:none}
   .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
   @keyframes spin{to{transform:rotate(360deg)}}
-  @media(max-width:480px){.area-grid{grid-template-columns:1fr}.header{padding:1.5rem}.header h1{font-size:19px}}
+
+  /* ── Splash / Welcome ── */
+  #welcome-screen { max-width: 680px; margin: 0 auto; padding: 1rem 0 3rem; }
+
+  .splash-hero {
+    background: linear-gradient(145deg, #162363 0%, #0D1744 100%);
+    border-radius: 20px;
+    padding: 2.8rem 2.5rem 2.4rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .splash-hero::before {
+    content: '';
+    position: absolute;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(30,136,229,0.12);
+    right: -80px; top: -80px;
+  }
+  .splash-hero::after {
+    content: '';
+    position: absolute;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(26,140,78,0.1);
+    left: -40px; bottom: -50px;
+  }
+  .splash-eyebrow {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #FF6600;
+    background: rgba(255,102,0,0.12);
+    border: 1px solid rgba(255,102,0,0.25);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .splash-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .splash-lead {
+    font-size: 15px;
+    color: #90A4AE;
+    line-height: 1.8;
+    max-width: 460px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .splash-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .scard {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem 1rem;
+  }
+  .scard-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--orange);
+    letter-spacing: .06em;
+    margin-bottom: 8px;
+    background: var(--orange-l);
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .scard-text {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .splash-quote {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 1.2rem 1.25rem;
+    background: var(--orange-l);
+    border-radius: 14px;
+    margin-bottom: 1.5rem;
+  }
+  .splash-quote-line {
+    width: 4px;
+    min-width: 4px;
+    height: 48px;
+    background: var(--orange);
+    border-radius: 2px;
+  }
+  .splash-quote p {
+    font-size: 14px;
+    color: var(--navy);
+    line-height: 1.7;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .splash-cta { text-align: center; }
+  .splash-hint { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+  .btn-wow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 36px;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    cursor: pointer;
+    border: none;
+    background: linear-gradient(135deg, #162363 0%, #CC1111 100%);
+    color: white;
+    letter-spacing: .01em;
+    transition: all .2s;
+    box-shadow: 0 4px 20px rgba(22,35,99,0.4);
+  }
+  .btn-wow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(204,17,17,0.4);
+  }
+  .btn-wow:active { transform: translateY(0); }
+  .btn-wow-text { font-size: 15px; }
+  .btn-wow-arrow {
+    font-size: 18px;
+    transition: transform .2s;
+  }
+  .btn-wow:hover .btn-wow-arrow { transform: translateX(4px); }
+
+    @media(max-width:560px){.splash-cards{grid-template-columns:1fr}.splash-title{font-size:24px}}.splash-hero{padding:2rem 1.5rem 1.8rem}  @media(max-width:480px){.area-grid{grid-template-columns:1fr}.header{padding:1.5rem}.header h1{font-size:19px}}
 </style>
 </head>
 <body>
 <div class="container">
 
-  <div class="header">
-    <div class="header-tag">Lisan Motors SAS — Fase 0</div>
-    <h1>Levantamiento de Requisitos</h1>
-    <p>Selecciona tu área y responde desde tu experiencia real del día a día.<br>No hay respuestas correctas — lo que importa es la realidad del proceso.</p>
-  </div>
-
-  <div class="progress-wrap">
+  <div class="progress-wrap" id="progress-wrap" style="display:none;">
     <div class="progress-top">
       <span class="progress-label" id="prog-label">Identificación</span>
       <span class="progress-pct" id="prog-pct">0%</span>
@@ -107,7 +254,48 @@
     <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
   </div>
 
-  <div id="form-wrap">
+  
+  <!-- Welcome Screen -->
+  <div id="welcome-screen">
+
+    <div class="splash-hero">
+      <div class="splash-eyebrow">Lisan Motors SAS</div>
+      <h1 class="splash-title">Lo que viene<br><span style="color:#FF6600">lo construimos juntos.</span></h1>
+      <p class="splash-lead">Estamos transformando la forma en que operamos — y no queremos hacerlo sin las personas que hacen que esto funcione todos los días.</p>
+    </div>
+
+    <div class="splash-cards">
+      <div class="scard">
+        <div class="scard-num">01</div>
+        <p class="scard-text">No hay respuestas buenas ni malas. Solo queremos saber cómo vives el proceso desde donde estás.</p>
+      </div>
+      <div class="scard">
+        <div class="scard-num">02</div>
+        <p class="scard-text">Lo que cuentes hoy va directo al diseño. No a un archivo, no a un informe — al sistema que vamos a usar.</p>
+      </div>
+      <div class="scard">
+        <div class="scard-num">03</div>
+        <p class="scard-text">5 a 8 minutos. Preguntas concretas sobre tu área. Sin tecnicismos, sin relleno.</p>
+      </div>
+    </div>
+
+    <div class="splash-quote">
+      <div class="splash-quote-line"></div>
+      <p>"Nadie conoce mejor un proceso<br>que quien lo vive todos los días."</p>
+    </div>
+
+    <div class="splash-cta">
+      <button class="btn-wow" onclick="startSurvey()">
+        <span class="btn-wow-text">¡Quiero aportar!</span>
+        <span class="btn-wow-arrow">→</span>
+      </button>
+      <p class="splash-hint">Selecciona tu área y cuéntanos todo</p>
+    </div>
+
+  </div>
+
+
+<div id="form-wrap" style="display:none;">
 
     <!-- Step 0: Identificación + Área -->
     <div class="step-screen" id="step-0">
@@ -128,6 +316,7 @@
           <div class="area-card" onclick="selectArea(this,'Área Comercial')">Área Comercial</div>
           <div class="area-card" onclick="selectArea(this,'Asistente Administrativo')">Asistente Administrativo</div>
         </div>
+      <div id="step0-error" style="display:none;margin-top:10px;padding:10px 14px;background:#FEF2F2;border-radius:10px;border:1px solid #FCA5A5;font-size:13px;color:#DC2626;"></div>
       </div>
     </div>
 
@@ -143,7 +332,7 @@
 
   </div>
 
-  <div class="nav" id="nav-wrap">
+  <div class="nav" id="nav-wrap" style="display:none;">
     <button class="btn" id="btn-back" onclick="nav(-1)" disabled>Anterior</button>
     <button class="btn btn-primary" id="btn-next" onclick="nav(1)">Siguiente</button>
   </div>
@@ -366,8 +555,20 @@ function saveTA(key, el) {
 
 function nav(dir) {
   if (currentStep === 0 && dir === 1) {
-    if (!document.getElementById('nombre').value.trim()) { alert('Por favor ingresa tu nombre.'); return; }
-    if (!selectedArea) { alert('Por favor selecciona tu área.'); return; }
+    const nombre = document.getElementById('nombre');
+    const errEl = document.getElementById('step0-error');
+    if (!nombre.value.trim()) {
+      errEl.textContent = 'Por favor escribe tu nombre antes de continuar.';
+      errEl.style.display = 'block';
+      nombre.focus();
+      return;
+    }
+    if (!selectedArea) {
+      errEl.textContent = 'Por favor selecciona tu área antes de continuar.';
+      errEl.style.display = 'block';
+      return;
+    }
+    errEl.style.display = 'none';
     questions = QUESTIONS[selectedArea] || [];
     currentStep = 1;
     document.getElementById('step-0').classList.add('hidden');
@@ -379,7 +580,16 @@ function nav(dir) {
 
   if (dir === 1 && currentStep === questions.length) { submitForm(); return; }
 
-  currentStep = Math.max(1, Math.min(questions.length, currentStep + dir));
+  currentStep = Math.max(0, Math.min(questions.length, currentStep + dir));
+
+  if (currentStep === 0) {
+    document.getElementById('step-0').classList.remove('hidden');
+    document.getElementById('step-q').classList.add('hidden');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
   renderQuestion();
   updateProgress();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -427,6 +637,7 @@ function resetForm() {
   questions = [];
 
   document.getElementById('nombre').value = '';
+  const e = document.getElementById('step0-error'); if(e) e.style.display='none';
   document.querySelectorAll('.area-card').forEach(c => c.classList.remove('selected'));
 
   document.getElementById('step-0').classList.remove('hidden');
@@ -439,6 +650,14 @@ function resetForm() {
   document.getElementById('btn-next').textContent = 'Siguiente';
 
   updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startSurvey() {
+  document.getElementById('welcome-screen').style.display = 'none';
+  document.getElementById('form-wrap').style.display = 'block';
+  document.getElementById('progress-wrap').style.display = 'block';
+  document.getElementById('nav-wrap').style.display = 'flex';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
