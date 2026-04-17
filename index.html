@@ -70,6 +70,8 @@
   textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);resize:vertical;min-height:90px;line-height:1.6;transition:border-color .2s;background:var(--gray-l)}
   textarea:focus{outline:none;border-color:var(--orange);background:white}
   .char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:6px}
+  .otro-txt{width:100%;margin-top:8px;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--gray-l)}
+  .otro-txt:focus{outline:none;border-color:var(--orange);background:white}
 
   .scale-row{display:flex;gap:8px}
   .scale-btn{flex:1;height:44px;border-radius:10px;border:1px solid var(--border);background:var(--gray-l);font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
@@ -345,7 +347,6 @@
         <label class="field-label">Selecciona tu área</label>
         <div class="area-grid" id="area-grid">
           <div class="area-card" onclick="selectArea(this,'Alistamiento')">Alistamiento</div>
-          <div class="area-card" onclick="selectArea(this,'Compra de Vehículos')">Compra de Vehículos</div>
           <div class="area-card" onclick="selectArea(this,'Coordinación de Créditos')">Coordinación de Créditos</div>
           <div class="area-card" onclick="selectArea(this,'Contabilidad')">Contabilidad</div>
           <div class="area-card" onclick="selectArea(this,'Trámites')">Trámites</div>
@@ -389,130 +390,139 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-Kn99yIeQP_IqUn3_4
 
 const QUESTIONS = {
   'Alistamiento': [
-    {l:1, type:'radio', text:'Cuando entra un vehículo comprado o llega para entrega de venta, ¿cómo se registra su recepción?', opts:['En el momento, desde el computador','Primero en papel y luego al sistema','Lo registra otra persona más tarde','No siempre se registra de inmediato']},
-    {l:1, type:'radio', text:'¿Cómo saben cuántos vehículos hay disponibles en tiempo real?', opts:['Consultando el archivo de Drive','Preguntando a quien maneja el inventario','Contando físicamente en el patio','No hay una forma confiable hoy']},
-    {l:1, type:'radio', text:'Cuando un vehículo cambia de estado (recibido, en alistamiento, listo para vitrina, entregado), ¿quién lo actualiza y cómo?', opts:['Una sola persona designada','Cualquiera del área puede hacerlo','Depende de quién esté disponible','A veces no se actualiza a tiempo']},
-    {l:2, type:'radio', text:'¿Ha pasado que el inventario no reflejaba la realidad del patio?', opts:['Sí, ha pasado varias veces','Alguna vez ha pasado','Rara vez','No ha pasado']},
-    {l:2, type:'radio', text:'Si la persona que maneja el inventario no está, ¿qué pasa?', opts:['Alguien más lo puede hacer sin problema','Se detiene hasta que regrese','Se improvisa pero hay riesgo de errores','Nadie más sabe cómo hacerlo']},
-    {l:2, type:'radio', text:'¿Tienen algún proceso para registrar el estado físico del vehículo al entrar?', opts:['Sí, tenemos check list y fotos','Solo anotaciones en papel','Depende de quien lo recibe','No hay proceso formal']},
-    {l:2, type:'textarea', text:'¿Qué información del vehículo les gustaría registrar pero hoy no tienen dónde?'},
-    {l:2, type:'textarea', text:'¿Cuál es el mayor dolor del día a día en la gestión del inventario?'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería registrar entradas desde el celular con fotos y check list?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'scale', text:'¿Qué tan valioso sería que gerencia vea el estado de todos los vehículos en tiempo real sin pedirle reporte a nadie?', lo:'Poco valioso', hi:'Muy valioso'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería una alerta automática cuando un vehículo lleva más días de lo normal sin avanzar?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'textarea', text:'¿Qué cambio en el proceso de inventario les ahorraría más tiempo o errores?'},
+    {l:1, type:'radio', text:'Cuando un vehículo llega para compra o sale en una venta, ¿cómo se registra ese movimiento?', opts:['En el sistema al momento de recibirlo o entregarlo','Primero en papel o WhatsApp, luego en el sistema','Se le avisa a otra persona para que lo registre','Muchas veces no queda registrado de inmediato']},
+    {l:1, type:'radio', text:'Si necesitas saber el estado actual de un vehículo específico, ¿qué tienes que hacer?', opts:['Consulto el sistema directo','Le pregunto a la persona que lo maneja','Voy físicamente al patio a verificar','Reviso el grupo de WhatsApp o el chat del área']},
+    {l:2, type:'radio', text:'¿Ha pasado que el sistema dice que un vehículo está disponible pero físicamente no está, o viceversa?', opts:['Sí, pasa con frecuencia','Alguna vez ha pasado y causó problemas','Rara vez','No ha pasado']},
+    {l:2, type:'radio', text:'Cuando hay un error en un registro de entrada o salida, ¿qué tienes que hacer para corregirlo?', opts:['Lo corrijo directamente yo en el sistema','Tengo que pedirle a alguien que tenga acceso','Toca contactar a quien lo registró originalmente','No hay forma clara de corregirlo sin arriesgar otros datos']},
+    {l:2, type:'radio', text:'¿Qué pasa con el proceso de alistamiento cuando la persona responsable no está?', opts:['Cualquiera puede continuarlo sin problema','Alguien más lo intenta pero pierde tiempo buscando información','El proceso se frena hasta que regrese','Nadie más sabe exactamente en qué estado quedó cada vehículo']},
+    {l:2, type:'textarea', text:'Describe el último caso donde un error en alistamiento o inventario causó un problema real. ¿Qué pasó, cuánto tiempo se perdió y cómo lo resolvieron?'},
+    {l:3, type:'radio', text:'¿Hay momentos en los que necesitas registrar o consultar información de un vehículo pero no tienes acceso a un computador?', opts:['Sí, frecuentemente — estoy en el patio o en otra área','Sí, a veces cuando estoy haciendo la recepción física','Rara vez','No — siempre estoy frente a un computador cuando lo necesito']},
+    {l:3, type:'scale', text:'¿Qué impacto tendría tener el estado real de cada vehículo visible para todas las áreas en tiempo real, sin tener que preguntar ni ir a verificar?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo se recuperaría si el sistema detectara automáticamente inconsistencias entre el registro y el inventario real?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso de alistamiento, ¿qué tendría más impacto inmediato?', opts:['Que cualquier persona pueda registrar o consultar sin depender de alguien específico','Que el sistema avise automáticamente cuando algo no cuadra','Que el historial de cada vehículo esté siempre disponible y completo','Que no haya que desplazarse ni preguntar para saber el estado de un vehículo']},
+    {l:3, type:'textarea', text:'¿Qué cosa radical — que hoy parece imposible — cambiaría completamente cómo funciona el alistamiento o cómo vive ese proceso alguien de afuera?'},
+    {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Una idea, una queja, algo que no te preguntamos. Este espacio es tuyo.'},
   ],
-  'Compra de Vehículos': [
-    {l:1, type:'radio', text:'¿Cómo se registra el primer contacto con un vendedor o propietario?', opts:['En el momento en el sistema','En papel primero, luego al sistema','Depende de quien atienda','No siempre se registra']},
-    {l:1, type:'radio', text:'¿Cómo hacen seguimiento a una negociación en curso?', opts:['En el archivo de Drive','Por WhatsApp o correo','De memoria o en papel','No hay seguimiento formal']},
-    {l:1, type:'radio', text:'¿Dónde queda el historial de cada negociación?', opts:['En el archivo de Drive','En correos o chats','En la memoria de quien la manejó','No queda registrado']},
-    {l:2, type:'radio', text:'¿Ha perdido negocios por falta de seguimiento oportuno?', opts:['Sí, ha pasado varias veces','Alguna vez','Rara vez','No ha pasado']},
-    {l:2, type:'radio', text:'¿Qué pasos de la negociación se hacen por fuera del sistema?', opts:['La mayoría se hacen por fuera','Solo algunos pasos','Casi todo está en el sistema','Todo está en el sistema']},
-    {l:2, type:'radio', text:'¿Cómo saben en qué etapa está cada negociación activa?', opts:['Consultando el archivo de Drive','Preguntando al responsable','Revisando el chat o correo','No hay visibilidad clara']},
-    {l:2, type:'textarea', text:'¿Qué información de la negociación no tienen dónde registrar hoy?'},
-    {l:2, type:'textarea', text:'¿Cuál es el mayor dolor en el proceso de compra de vehículos?'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería tener el historial completo de cada prospecto en un solo lugar?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'scale', text:'¿Qué tan valioso sería una alerta automática si una negociación lleva +48h sin respuesta?', lo:'Poco valioso', hi:'Muy valioso'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería un pipeline visual del estado de cada negociación activa?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'textarea', text:'¿Qué automatización les ahorraría más tiempo en el proceso de compra?'},
-  ],
-  'Coordinación de Créditos': [
-    {l:1, type:'radio', text:'¿Cómo se registra una solicitud de crédito al recibirla?', opts:['En el sistema de inmediato','En papel primero','Depende de quien la recibe','No siempre se registra']},
-    {l:1, type:'radio', text:'¿Cómo hacen seguimiento a cada caso activo?', opts:['En el archivo de Drive','Por correo o chat','De memoria','No hay seguimiento formal']},
-    {l:1, type:'radio', text:'¿Dónde están los documentos de cada solicitud?', opts:['En carpetas digitales organizadas','En físico','Mezclados en Drive','No hay organización clara']},
-    {l:2, type:'radio', text:'¿Ha habido casos sin respuesta o perdidos por falta de seguimiento?', opts:['Sí, ha pasado','Alguna vez','Rara vez','No ha pasado']},
-    {l:2, type:'radio', text:'¿Qué validaciones hacen manualmente que podrían automatizarse?', opts:['Verificación de documentos','Cálculo de capacidad de pago','Notificación al cliente','Todas las anteriores']},
-    {l:2, type:'radio', text:'¿Cómo saben qué casos están pendientes en este momento?', opts:['Revisando el archivo de Drive','Preguntando al equipo','Revisando correos','No hay visibilidad clara']},
-    {l:2, type:'textarea', text:'¿Qué información del cliente o del crédito no tienen dónde registrar hoy?'},
-    {l:2, type:'textarea', text:'¿Cuál es el mayor dolor en la coordinación de créditos?'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería una alerta automática por caso sin respuesta en más de X días?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'scale', text:'¿Qué tan valioso sería tener validación documental automática antes de aprobar?', lo:'Poco valioso', hi:'Muy valioso'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería un dashboard de todos los casos por estado en tiempo real?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'textarea', text:'¿Qué cambio les daría más agilidad en el día a día de créditos?'},
-  ],
-  'Contabilidad': [
-    {l:1, type:'radio', text:'¿Cómo se registran los movimientos contables hoy?', opts:['En el archivo de Drive','En software contable externo','En Excel por separado','Combinación de varios métodos']},
-    {l:1, type:'radio', text:'¿Cómo concilian la información entre áreas?', opts:['Piden los datos directamente','Cruzan archivos de Drive','Usan reportes exportados','No hay conciliación formal']},
-    {l:1, type:'radio', text:'¿Cómo generan los reportes financieros actuales?', opts:['Consolidando archivos a mano','Exportando desde software','Los arman desde cero cada vez','Depende del tipo de reporte']},
-    {l:2, type:'radio', text:'¿Ha habido errores por datos duplicados o desactualizados entre áreas?', opts:['Sí, ha pasado varias veces','Alguna vez','Rara vez','No ha pasado']},
-    {l:2, type:'radio', text:'¿Qué procesos dependen de que otra área les pase la información primero?', opts:['Cierre mensual','Conciliación de pagos','Registro de ventas','Todos los anteriores']},
-    {l:2, type:'radio', text:'¿Cuánto tiempo toma consolidar un informe hoy?', opts:['Horas dentro del mismo día','Un día completo','Varios días','Más de una semana']},
-    {l:2, type:'textarea', text:'¿Qué información contable no tienen centralizada o es difícil de obtener?'},
-    {l:2, type:'textarea', text:'¿Cuál es el mayor dolor en el área contable hoy?'},
-    {l:3, type:'scale', text:'¿Qué tan valioso sería que la información de todas las áreas llegue sola a contabilidad en tiempo real?', lo:'Poco valioso', hi:'Muy valioso'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería generar reportes automáticamente sin consolidar a mano?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'scale', text:'¿Qué tan importante sería tener trazabilidad completa de cada movimiento por usuario?', lo:'Poco importante', hi:'Muy importante'},
-    {l:3, type:'textarea', text:'¿Qué automatización les cambiaría el día a día en contabilidad?'},
-  ],
-  'Trámites': [
-    {l:1, type:'radio', text:'¿Cómo hacen seguimiento a cada trámite hoy?', opts:['En el archivo de Drive','En papel o agenda','Por correo o chat','No hay seguimiento formal']},
-    {l:1, type:'radio', text:'¿Dónde están los documentos de cada vehículo en trámite?', opts:['En carpetas digitales organizadas','En físico','Mezclados en Drive','No hay organización clara']},
-    {l:1, type:'radio', text:'¿Cómo saben cuáles trámites están pendientes en este momento?', opts:['Revisando el archivo de Drive','Preguntando al equipo','Revisando correos','No hay visibilidad clara']},
-    {l:2, type:'radio', text:'¿Ha habido vehículos retrasados por trámites incompletos o vencidos?', opts:['Sí, ha pasado varias veces','Alguna vez','Rara vez','No ha pasado']},
-    {l:2, type:'radio', text:'¿Qué pasos del trámite dependen de que una persona específica esté disponible?', opts:['La mayoría de pasos','Algunos pasos clave','Muy pocos pasos','Ninguno — cualquiera puede hacerlo']},
-    {l:2, type:'radio', text:'¿Cómo notifican a otras áreas cuando un trámite avanza o se completa?', opts:['Por WhatsApp o correo','Verbalmente','En el archivo de Drive','No hay notificación formal']},
-    {l:2, type:'textarea', text:'¿Qué información del trámite o del vehículo no tienen dónde registrar hoy?'},
-    {l:2, type:'textarea', text:'¿Cuál es el mayor dolor en el área de trámites?'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería un check list digital por vehículo con el estado de cada documento?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'scale', text:'¿Qué tan valioso sería una alerta automática por trámite próximo a vencer?', lo:'Poco valioso', hi:'Muy valioso'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería que el sistema notifique automáticamente a la siguiente área al completar una etapa?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'textarea', text:'¿Qué cambio les ahorraría más reprocesos en trámites?'},
-  ],
-  'Tesorería': [
-    {l:1, type:'radio', text:'¿Cómo se registran los pagos hoy?', opts:['En el archivo de Drive','En software contable','En Excel aparte','Combinación de métodos']},
-    {l:1, type:'radio', text:'¿Cómo validan que los documentos estén completos antes de procesar un pago?', opts:['Revisión manual antes de pagar','Se valida en el momento','A veces se paga sin validar todo','No hay proceso formal de validación']},
-    {l:1, type:'radio', text:'¿Dónde queda el registro de cada transacción?', opts:['En el archivo de Drive','En el software contable','En correos o extractos','No hay un lugar único']},
-    {l:2, type:'radio', text:'¿Ha habido pagos procesados con documentación incompleta?', opts:['Sí, ha pasado','Alguna vez','Rara vez','No ha pasado']},
-    {l:2, type:'radio', text:'¿Cómo saben qué pagos están pendientes en este momento?', opts:['Revisando el archivo de Drive','Preguntando a las áreas','Revisando correos o chats','No hay visibilidad clara']},
-    {l:2, type:'radio', text:'¿Cuánto tiempo toma conciliar pagos al cierre de mes?', opts:['Pocas horas','Un día','Varios días','Más de una semana']},
-    {l:2, type:'textarea', text:'¿Qué información financiera no tienen centralizada o es difícil de obtener?'},
-    {l:2, type:'textarea', text:'¿Cuál es el mayor dolor en tesorería hoy?'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería que el sistema bloquee automáticamente un pago si falta algún documento?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'scale', text:'¿Qué tan valioso sería la conciliación automática de pagos contra documentos?', lo:'Poco valioso', hi:'Muy valioso'},
-    {l:3, type:'scale', text:'¿Qué tan importante sería tener trazabilidad completa de cada transacción?', lo:'Poco importante', hi:'Muy importante'},
-    {l:3, type:'textarea', text:'¿Qué automatización les daría más control en tesorería?'},
-  ],
-  'Gerencia Comercial': [
-    {l:1, type:'radio', text:'¿Cómo accede a los indicadores del negocio hoy?', opts:['Me los preparan y envían','Los consulto en el archivo de Drive','Los calculo yo mismo','No tengo acceso fluido a indicadores']},
-    {l:1, type:'radio', text:'¿Con qué frecuencia recibe informes y de dónde vienen?', opts:['Diariamente — de varios archivos','Semanalmente','Solo cuando los solicito','No hay informes regulares']},
-    {l:1, type:'radio', text:'¿Cómo hace seguimiento al equipo comercial?', opts:['Reuniones y reportes manuales','Revisando los archivos de Drive','Preguntando directamente','No hay seguimiento estructurado']},
-    {l:2, type:'radio', text:'¿Ha tomado decisiones con información que luego estaba desactualizada?', opts:['Sí, ha pasado varias veces','Alguna vez','Rara vez','No ha pasado']},
-    {l:2, type:'radio', text:'¿Qué información necesita y hoy no tiene disponible cuando la necesita?', opts:['Estado del inventario en tiempo real','Pipeline de compras y ventas','Indicadores financieros','Todas las anteriores']},
-    {l:2, type:'radio', text:'¿Qué reportes le toca pedir manualmente que deberían llegar solos?', opts:['Inventario disponible','Estado de negociaciones','Flujo de caja','Todos los anteriores']},
-    {l:2, type:'textarea', text:'¿Qué métricas del negocio no está midiendo hoy y le gustaría medir?'},
-    {l:2, type:'textarea', text:'¿Cuál es la mayor limitación para tomar decisiones hoy?'},
-    {l:3, type:'scale', text:'¿Qué tan valioso sería un dashboard con indicadores clave en tiempo real?', lo:'Poco valioso', hi:'Muy valioso'},
-    {l:3, type:'scale', text:'¿Qué tan útil serían alertas automáticas cuando una métrica supera o cae bajo un umbral?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'scale', text:'¿Qué tan valioso sería ver el ciclo completo de cada vehículo desde la compra hasta la venta?', lo:'Poco valioso', hi:'Muy valioso'},
-    {l:3, type:'textarea', text:'¿Qué información le cambiaría la forma de gestionar el negocio?'},
-  ],
-  'Asistente Administrativo': [
-    {l:1, type:'radio', text:'¿Cómo se genera hoy un contrato de compra o venta de vehículo?', opts:['Se llena un formato en Word o Excel y se imprime','Se genera manualmente campo por campo cada vez','Hay una plantilla pero se completa a mano','No hay un proceso estandarizado']},
-    {l:1, type:'radio', text:'¿Cuánto tiempo toma preparar toda la documentación de una negociación (contrato, check list, carpeta)?', opts:['Más de 2 horas','Entre 1 y 2 horas','Entre 30 min y 1 hora','Menos de 30 minutos']},
-    {l:1, type:'radio', text:'¿Dónde se almacenan hoy los contratos y documentos de cada vehículo?', opts:['Físicamente en carpetas','En Drive sin estructura clara','En Drive bien organizado por vehículo','Combinación de físico y digital']},
-    {l:2, type:'textarea', text:'Cuéntanos del último caso donde un documento faltante o incorrecto retrasó o complicó un negocio. ¿Qué pasó y cómo lo resolvieron?'},
-    {l:2, type:'radio', text:'¿Con qué frecuencia hay que volver a buscar un documento que se creyó archivado y no aparece?', opts:['Varias veces a la semana','Al menos una vez a la semana','Rara vez','Nunca — el archivo siempre está disponible']},
-    {l:2, type:'radio', text:'¿Hay momentos en los que necesitas acceder a un contrato o documento pero no estás en la oficina?', opts:['Sí, frecuentemente','Sí, a veces','Rara vez','No — siempre estoy en la oficina cuando lo necesito']},
-    {l:2, type:'textarea', text:'¿Qué información de cada negociación o vehículo hoy se pierde, queda incompleta o nadie sabe dónde está?'},
-    {l:3, type:'scale', text:'¿Qué impacto tendría que los contratos se generen automáticamente con los datos del vehículo y del cliente sin tener que escribirlos a mano?', lo:'Poco impacto', hi:'Alto impacto'},
-    {l:3, type:'scale', text:'¿Cuánto tiempo ahorraría tener el expediente digital completo de cada vehículo — contrato, check list, fotos, documentos — en un solo lugar accesible desde cualquier parte?', lo:'Nada', hi:'Muchísimo'},
-    {l:3, type:'radio', text:'¿Cuál es el mayor dolor en la gestión documental y administrativa hoy?', opts:['Generar documentos desde cero cada vez','Encontrar documentos cuando se necesitan','Asegurarse de que nada falte antes de cerrar','Coordinar con otras áreas para completar la carpeta']},
-    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué eliminaría más reprocesos en administración?', opts:['Generación automática de contratos y documentos','Expediente digital unificado por vehículo','Validación automática de documentos completos','Notificación cuando una carpeta está lista para continuar']},
-    {l:3, type:'textarea', text:'¿Qué cosa radical — que hoy parece imposible — cambiaría completamente cómo funciona la parte administrativa o cómo vive ese proceso alguien externo (el comprador, el vendedor)? Este espacio es tuyo.'},
-  ],
+
   'Área Comercial': [
-    {l:1, type:'radio', text:'¿Cómo registran los contactos y prospectos de venta hoy?', opts:['En el archivo de Drive','Por WhatsApp o correo','En papel o agenda','No hay registro formal']},
-    {l:1, type:'radio', text:'¿Cómo hacen seguimiento a cada oportunidad de venta?', opts:['En el archivo de Drive','Por chat o correo','De memoria','No hay seguimiento formal']},
-    {l:1, type:'radio', text:'¿Cómo consultan el inventario disponible?', opts:['En el archivo de Drive','Preguntando a quien lo maneja','Yendo físicamente al patio','No hay forma confiable']},
-    {l:2, type:'radio', text:'¿Ha perdido ventas por no tener información del vehículo o del cliente a tiempo?', opts:['Sí, ha pasado varias veces','Alguna vez','Rara vez','No ha pasado']},
-    {l:2, type:'radio', text:'¿Qué parte del proceso de venta se hace completamente por fuera del sistema?', opts:['La negociación completa','Solo el cierre','La post-venta','Todo está en el sistema']},
-    {l:2, type:'radio', text:'¿Cómo saben cuántas oportunidades de venta están abiertas en este momento?', opts:['Revisando el archivo de Drive','Preguntando al equipo','No hay visibilidad clara','Cada uno lleva los suyos']},
-    {l:2, type:'textarea', text:'¿Qué información del cliente no tienen dónde registrar hoy?'},
-    {l:2, type:'textarea', text:'¿Cuál es el mayor dolor en el proceso de ventas?'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería consultar el inventario completo desde el celular en cualquier momento?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'scale', text:'¿Qué tan valioso sería tener el historial completo de cada cliente en un solo lugar?', lo:'Poco valioso', hi:'Muy valioso'},
-    {l:3, type:'scale', text:'¿Qué tan útil sería un recordatorio automático de seguimiento a oportunidades abiertas?', lo:'Nada útil', hi:'Muy útil'},
-    {l:3, type:'textarea', text:'¿Qué herramienta les ayudaría a cerrar más negocios?'},
+    {l:1, type:'radio', text:'En tu rol, ¿qué proceso manejas principalmente?', opts:['Compra de vehículos (contacto con vendedores, peritaje, cierre)','Venta de vehículos (contacto con compradores, crédito, entrega)','Ambos procesos según el caso','Seguimiento y gestión comercial general']},
+    {l:1, type:'radio', text:'Cuando tienes un prospecto interesado (ya sea para comprar o vender), ¿cómo registras ese contacto y lo das a seguimiento?', opts:['En el sistema de la empresa','En un archivo propio o Excel personal','En el grupo de WhatsApp del área','En mi agenda o en mi cabeza — no hay un sistema formal']},
+    {l:1, type:'radio', text:'¿Cuántas negociaciones activas puedes tener en paralelo antes de que alguna se pierda o quede sin seguimiento?', opts:['Más de 10 sin problema','Entre 5 y 10','Menos de 5 — después de eso se me escapan cosas','No tengo claro cuántas tengo activas en este momento']},
+    {l:2, type:'radio', text:'Cuando un cliente regresa después de días o semanas, ¿qué tan fácil es retomar la conversación con toda la información?', opts:['Fácil — tengo el historial completo','Tengo algo pero toca reconstruir parte de memoria','Tengo que preguntarle de nuevo al cliente lo que ya había dicho','Depende de si yo fui quien lo atendió antes']},
+    {l:2, type:'radio', text:'En el proceso de COMPRA de un vehículo, ¿qué paso genera más reprocesos, demoras o información perdida?', opts:['La coordinación del peritaje y el resultado','La aprobación del precio y las condiciones con gerencia','La generación de contratos y documentos','El paso de información a tesorería y trámites para continuar']},
+    {l:2, type:'radio', text:'En el proceso de VENTA de un vehículo, ¿qué paso genera más reprocesos o demoras?', opts:['Confirmar con alistamiento que el vehículo está listo','Coordinar el crédito o la financiación con la entidad','La preparación de la documentación y el contrato de venta','La entrega final y el cierre con el cliente']},
+    {l:2, type:'radio', text:'Cuando un negocio no se cierra, ¿qué tan fácil es saber exactamente por qué se cayó?', opts:['Fácil — queda registrado con el motivo','Queda algo pero no es sistemático','Hay que preguntarle al comercial que lo manejó','No queda registro — se pierde con la persona']},
+    {l:2, type:'textarea', text:'Cuéntanos de un negocio (compra o venta) que se perdió o se complicó por falta de información oportuna o comunicación entre áreas. ¿Qué cambiarías?'},
+    {l:2, type:'textarea', text:'¿Qué información del cliente o del vehículo hoy se maneja por WhatsApp, de memoria o de forma informal y debería estar registrada en el sistema?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría poder ver en tiempo real el estado de cada negociación activa — compras y ventas — sin tener que preguntar a nadie?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Qué tan valioso sería recibir una alerta automática cuando una negociación lleva más de 48 horas sin movimiento?', lo:'Poco valioso', hi:'Muy valioso'},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso comercial (compra y venta), ¿qué eliminaría más reprocesos hoy?', opts:['Que toda la información del cliente y la negociación esté en un solo lugar','Que el sistema avise automáticamente cuando algo requiere acción','Que al cerrar una compra o venta, la información fluya sola a las otras áreas','Que cualquier comercial pueda retomar una negociación sin perder contexto']},
+    {l:3, type:'textarea', text:'¿Qué cosa radical cambiaría completamente cómo opera el área comercial — algo que hoy parece imposible? Por ejemplo: que el cliente pueda consultar el estado de su proceso sin llamar.'},
+    {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Este espacio es tuyo.'},
+  ],
+
+  'Trámites': [
+    {l:1, type:'radio', text:'¿Cómo sabes en este momento qué trámites están pendientes, cuáles están en curso y cuáles ya están listos?', opts:['Consulto el sistema o el archivo del área','Llevo un control propio en papel o Excel personal','Le pregunto a mis compañeros o reviso el chat','Tengo que recordarlo o revisar cada carpeta físicamente']},
+    {l:1, type:'radio', text:'Cuando un documento de un trámite llega incompleto o incorrecto desde otra área, ¿qué tienes que hacer?', opts:['Lo registro y notifico directamente por el sistema','Voy personalmente o llamo a quien lo envió','Mando un mensaje por WhatsApp y espero respuesta','El trámite queda en pausa hasta que se resuelva']},
+    {l:2, type:'radio', text:'¿Con qué frecuencia un vehículo llega a trámites con documentación incompleta o incorrecta?', opts:['Muy frecuente — es el pan de cada día','Varias veces a la semana','Alguna vez','Rara vez — generalmente llega todo completo']},
+    {l:2, type:'radio', text:'¿Cuántos vehículos tienen hoy algún documento vencido o próximo a vencer sin que nadie haya tomado acción?', opts:['No tengo esa información disponible fácilmente','Probablemente varios — no hay una alerta que me avise','Uno o dos — me enteré porque alguien preguntó','Ninguno — tengo control claro sobre los vencimientos']},
+    {l:2, type:'radio', text:'Cuando la persona que lleva un trámite específico no está disponible, ¿qué pasa?', opts:['Cualquiera puede retomarlo sin problema — todo está registrado','Alguien más lo intenta pero toca reconstruir desde cero','El trámite se queda en pausa hasta que regrese','Solo esa persona sabe exactamente en qué estado quedó']},
+    {l:2, type:'radio', text:'¿Cómo se entera tesorería, el área comercial o gerencia de que un trámite avanzó o se completó?', opts:['El sistema les notifica automáticamente','Yo les aviso personalmente o por WhatsApp','Se enteran cuando van a preguntar','Muchas veces no se enteran a tiempo y hay que recordarles']},
+    {l:2, type:'textarea', text:'Describe el trámite que más retrasos genera y por qué. ¿Cuánto tiempo promedio toma y dónde se atasca con más frecuencia?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría recibir una alerta automática cuando un documento está próximo a vencer o cuando un trámite lleva más tiempo del normal?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo se ahorraría si las otras áreas recibieran notificación automática al completar cada etapa, sin que tú tengas que avisarles?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso de trámites, ¿qué haría que fluyera sin depender de que tú estés disponible?', opts:['Que el expediente digital completo de cada vehículo esté accesible para cualquiera','Que el sistema avise automáticamente qué sigue y a quién','Que ningún vehículo pueda avanzar sin completar los documentos requeridos','Que los vencimientos se gestionen solos sin que yo tenga que rastrearlos']},
+    {l:3, type:'textarea', text:'Si el propietario del vehículo pudiera ver en tiempo real el estado de su trámite sin tener que llamar, ¿qué cambiaría en tu trabajo?'},
+    {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Este espacio es tuyo.'},
+  ],
+
+  'Tesorería': [
+    {l:1, type:'radio', text:'¿Cómo sabes en este momento qué pagos están pendientes de procesar hoy?', opts:['El sistema me muestra una lista actualizada','Tengo mi propio control en un archivo o agenda','Las otras áreas me avisan cuando necesitan un pago','Espero que alguien llegue a pedirlo — no hay visibilidad previa']},
+    {l:1, type:'radio', text:'Cuando llega una solicitud de pago, ¿cómo verificas que todos los documentos requeridos están completos y correctos?', opts:['El sistema valida automáticamente','Los reviso manualmente uno por uno antes de procesar','Confío en quien los envió y proceso — reviso si hay algo raro','A veces se procesa y luego se detecta que faltaba algo']},
+    {l:2, type:'radio', text:'¿Con qué frecuencia un pago llega con documentación incompleta o incorrecta?', opts:['Varias veces a la semana','Al menos una vez a la semana','Alguna vez','Rara vez']},
+    {l:2, type:'radio', text:'Cuando detectas un error en una solicitud de pago, ¿qué tienes que hacer?', opts:['Lo registro en el sistema y notifico desde ahí','Voy personalmente al área o llamo a quien lo envió','Mando un mensaje por WhatsApp y espero que lo corrijan','El proceso se frena y puede tardar horas o días en resolverse']},
+    {l:2, type:'radio', text:'¿Cómo queda registrado cada pago una vez procesado? ¿Quién tiene acceso a ese registro?', opts:['En el sistema con acceso para las áreas que lo necesitan','En mi propio archivo o carpeta — yo manejo ese control','En un archivo compartido pero sin trazabilidad clara','No hay un registro formal centralizado']},
+    {l:2, type:'radio', text:'¿Cuánto tiempo del mes se va en conciliar y cuadrar pagos con la información de otras áreas?', opts:['Más de 3 días','1 a 3 días','Menos de 1 día','Es mínimo — la información llega organizada']},
+    {l:2, type:'textarea', text:'¿Cuál ha sido el error de pago más costoso o problemático? ¿Cómo se detectó y qué impacto tuvo en el negocio?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría que el sistema no permita procesar un pago si falta algún documento requerido — sin necesidad de que tú lo revises manualmente?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo ahorraría que cada pago procesado se registre automáticamente en contabilidad sin que nadie tenga que enviarlo?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa de tesorería, ¿qué eliminaría más errores y reprocesos hoy?', opts:['Que ningún pago avance sin documentación completa — el sistema lo bloquea','Que tenga visibilidad en tiempo real de todos los pagos pendientes','Que cada transacción quede trazada con quién aprobó, cuándo y con qué documentos','Que contabilidad reciba la información sola sin intermediarios']},
+    {l:3, type:'textarea', text:'¿Qué información financiera hoy vive en correos, chats o en tu cabeza y debería estar centralizada en el sistema?'},
+    {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Este espacio es tuyo.'},
+  ],
+
+  'Coordinación de Créditos': [
+    {l:1, type:'radio', text:'¿Cómo registras y das seguimiento a una solicitud de crédito desde que llega hasta que se aprueba o se niega?', opts:['En el sistema del área con estado actualizado','En un archivo propio o Excel personal','En el grupo de WhatsApp o por correo','En papel o en mi cabeza — no hay un sistema formal']},
+    {l:1, type:'radio', text:'¿Cómo sabes en este momento cuántas solicitudes están activas y en qué etapa va cada una?', opts:['El sistema me da esa visión en tiempo real','Tengo mi propio control actualizado','Tengo que revisar uno a uno o preguntar a mis compañeros','No tengo esa visión clara en este momento']},
+    {l:2, type:'radio', text:'¿Con qué frecuencia una solicitud se retrasa porque un documento llegó mal o incompleto y nadie lo detectó a tiempo?', opts:['Con frecuencia — es el mayor problema','Alguna vez — cuando pasa genera reproceso','Rara vez','Casi nunca — se detecta antes de enviarlo']},
+    {l:2, type:'radio', text:'Cuando la entidad financiera pide un documento adicional o hace una corrección, ¿cómo se entera el equipo y cuánto tarda en resolverse?', opts:['El sistema notifica y se gestiona el mismo día','Se entera quien atendió la solicitud y avisa por WhatsApp','Puede tardar días si esa persona no está disponible','A veces se pierde información en el proceso']},
+    {l:2, type:'radio', text:'¿Qué pasa con una solicitud activa cuando la persona que la estaba manejando no está disponible?', opts:['Cualquiera puede retomar con toda la información','Alguien más lo intenta pero pierde tiempo buscando el historial','La solicitud queda en pausa','Solo esa persona sabe exactamente en qué punto quedó']},
+    {l:2, type:'textarea', text:'¿Cuál es el error más común que hace que un crédito se devuelva o se retrase? ¿Cómo lo detectan hoy y qué costo tiene ese retraso?'},
+    {l:2, type:'textarea', text:'¿Qué información del cliente o del proceso crediticio hoy vive en WhatsApp, correos o en la cabeza de alguien y debería estar en el sistema?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría una validación automática que detecte documentos faltantes o incorrectos antes de enviarlos a la entidad?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo ahorraría tener el historial completo de cada cliente y cada solicitud en un solo lugar accesible para todo el equipo?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso de créditos, ¿qué eliminaría más reprocesos hoy?', opts:['Que los documentos se validen automáticamente antes de enviarlos','Que cualquier persona del equipo pueda retomar un caso sin perder contexto','Que el sistema avise cuando un caso lleva mucho tiempo sin avanzar','Que el cliente pueda cargar sus documentos directamente sin intermediarios']},
+    {l:3, type:'textarea', text:'Si el cliente pudiera consultar el estado de su crédito en tiempo real sin tener que llamar, ¿qué cambiaría en tu trabajo?'},
+    {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Este espacio es tuyo.'},
+  ],
+
+  'Contabilidad': [
+    {l:1, type:'radio', text:'¿Cómo te llega la información de las otras áreas (ventas, compras, pagos) para los registros contables?', opts:['El sistema me la envía automáticamente','Me la envían por correo o me la pasan en archivos','Tengo que ir a pedirla o buscarla yo misma','Llega cuando alguien se acuerda — no hay un proceso definido']},
+    {l:1, type:'radio', text:'Cuando necesitas generar un reporte o un informe, ¿cuánto tiempo te toma tenerlo listo?', opts:['Menos de 1 hora — la información está centralizada','Medio día — tengo que consolidar de varias fuentes','Un día completo o más','Más de un día — depende de que otras áreas me respondan']},
+    {l:2, type:'radio', text:'¿Con qué frecuencia recibes información incorrecta o desactualizada de otras áreas que te genera reprocesos?', opts:['Varias veces al mes — es un problema recurrente','Al menos una vez al mes','Alguna vez','Rara vez — generalmente llega correcta']},
+    {l:2, type:'radio', text:'¿Qué tan confiable es la información que recibes hoy para hacer el cierre mensual?', opts:['Poco confiable — siempre hay que verificar y corregir','Regular — a veces llega mal o incompleta','Bastante confiable — raramente hay errores','Muy confiable — el proceso está bien controlado']},
+    {l:2, type:'radio', text:'¿Cuántas fuentes diferentes de información tienes que cruzar para cerrar el mes contable?', opts:['Más de 5 fuentes distintas','3 a 5 fuentes','2 fuentes','1 fuente centralizada']},
+    {l:2, type:'textarea', text:'¿Cuál ha sido el error contable más costoso causado por información que llegó mal desde otra área? ¿Cómo se detectó y qué impacto tuvo?'},
+    {l:2, type:'textarea', text:'¿Qué registros o movimientos hoy no tienen trazabilidad completa — entran sin saber quién los generó, cuándo o por qué?'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo ahorraría que cada compra, venta y pago llegue automáticamente a contabilidad sin que nadie tenga que enviarlo?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría poder generar el cierre mensual en horas en vez de días?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué mejoraría más la calidad de la información contable?', opts:['Que ningún movimiento pueda registrarse sin los datos mínimos requeridos','Que la información de todas las áreas llegue sola en tiempo real','Que los reportes se generen automáticamente al cierre del mes','Que cada error tenga un responsable claro y trazable']},
+    {l:3, type:'textarea', text:'¿Qué le pedirías al sistema nuevo que hoy es imposible tener con el esquema de archivos actual?'},
+    {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Este espacio es tuyo.'},
+  ],
+
+  'Gerencia Comercial': [
+    {l:1, type:'radio', text:'Cuando quieres saber el estado actual del negocio (vehículos disponibles, negociaciones activas, pagos pendientes), ¿qué tienes que hacer?', opts:['Consulto el sistema — está disponible en tiempo real','Le pido a alguien que me prepare un resumen','Reviso los archivos de Drive yo mismo','Espero el informe semanal o mensual']},
+    {l:1, type:'radio', text:'¿Cuántas veces al mes tomas una decisión con información que luego resultó estar desactualizada o incorrecta?', opts:['Varias veces — es un problema frecuente','Al menos una vez al mes','Alguna vez','Rara vez — la información generalmente es confiable']},
+    {l:2, type:'radio', text:'¿Cómo detectas hoy cuando un área está generando un cuello de botella en el proceso?', opts:['Me llegan alertas del sistema automáticamente','Alguien me avisa cuando ya hay un problema grave','Lo noto en las reuniones o cuando pregunto directamente','Generalmente me entero tarde cuando el daño ya está hecho']},
+    {l:2, type:'radio', text:'Cuando el equipo comercial pierde una negociación, ¿qué tan fácil es saber exactamente en qué punto se cayó y por qué?', opts:['Tengo el historial completo en el sistema','Me lo cuentan de memoria en la reunión','No queda registro formal — se pierde con quien lo manejó','No hay un proceso para analizar eso sistemáticamente']},
+    {l:2, type:'radio', text:'¿Qué información necesitas todos los días para gestionar bien el negocio y hoy tienes que pedir o buscar manualmente?', opts:['Estado del inventario disponible para venta','Pipeline de compras y ventas activas','Indicadores financieros y de rentabilidad','Todas las anteriores']},
+    {l:2, type:'textarea', text:'¿Cuál fue la última decisión importante que tomaste con información incorrecta o tarde? ¿Qué impacto tuvo y qué hubieras necesitado para decidir mejor?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría tener visibilidad total del negocio en tiempo real — sin depender de que alguien te prepare un informe?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto cambiaría tu capacidad de decisión si pudieras ver la rentabilidad real de cada vehículo desde la compra hasta la venta?', lo:'Poco cambio', hi:'Cambio radical'},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué te daría más control sobre el negocio hoy?', opts:['Ver todo en tiempo real sin esperar reportes de nadie','Saber dónde se pierde tiempo y dinero en el proceso','Tener alertas automáticas cuando algo sale de lo esperado','Proyecciones basadas en datos reales del inventario y el pipeline']},
+    {l:3, type:'textarea', text:'¿Qué decisión que hoy no puedes tomar bien podrías tomar si tuvieras los datos correctos en el momento correcto?'},
+    {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Este espacio es tuyo.'},
+  ],
+
+  'Asistente Administrativo': [
+    {l:1, type:'radio', text:'¿Cómo se genera hoy un contrato de compra o de venta de un vehículo?', opts:['Se llena una plantilla en Word o Excel cada vez','Se completa un formulario que genera el documento automáticamente','Se escribe desde cero adaptando uno anterior','No hay una plantilla estándar — cada uno lo hace a su manera']},
+    {l:1, type:'radio', text:'Cuando necesitas un documento específico de un vehículo o de una negociación (contrato, check list, soporte de pago), ¿qué tienes que hacer para encontrarlo?', opts:['Lo busco en el sistema directamente','Busco en las carpetas de Drive — a veces tarda','Le pregunto a quien lo generó para que me lo pase','Puede tomar bastante tiempo — no hay una organización clara']},
+    {l:2, type:'radio', text:'¿Con qué frecuencia un negocio se demora o se complica porque falta un documento o porque hay uno incorrecto?', opts:['Con frecuencia — es uno de los principales cuellos de botella','Alguna vez — genera retrasos cuando pasa','Rara vez','Casi nunca — el proceso documental funciona bien']},
+    {l:2, type:'radio', text:'Cuando hay un error en un documento ya firmado o enviado, ¿qué tienes que hacer?', opts:['Genero una corrección directamente en el sistema','Hay que volver a imprimir, corregir y firmar','Toca coordinar con varias personas para hacerlo bien','El proceso no está claro y genera confusión']},
+    {l:2, type:'radio', text:'¿Cómo se entera el área de que una carpeta está completa y lista para continuar al siguiente paso?', opts:['El sistema notifica automáticamente a quien sigue','Yo aviso personalmente o por WhatsApp','El área que sigue pregunta cuando lo necesita','A veces la carpeta queda lista y nadie se entera a tiempo']},
+    {l:2, type:'textarea', text:'Describe el último caso donde un documento faltante o incorrecto retrasó o complicó un negocio. ¿Qué pasó y cuánto tiempo se perdió?'},
+    {l:2, type:'textarea', text:'¿Qué información de contratos o documentos hoy vive en WhatsApp, correos sueltos o en la cabeza de alguien y debería estar centralizada?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría que los contratos se generen automáticamente con los datos del vehículo y del cliente, sin tener que escribirlos cada vez?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo ahorraría tener el expediente digital completo de cada vehículo — con todos los documentos, versiones y firmas — en un solo lugar?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso documental, ¿qué eliminaría más reprocesos hoy?', opts:['Que los contratos y documentos se generen solos con los datos que ya existen','Que nadie pueda avanzar en un proceso sin completar los documentos requeridos','Que el expediente de cada vehículo esté siempre completo y accesible para todos','Que la siguiente área sea notificada automáticamente cuando una carpeta está lista']},
+    {l:3, type:'textarea', text:'¿Qué cosa radical cambiaría completamente cómo funciona lo administrativo — por ejemplo, que el cliente pueda firmar digitalmente sin venir a la oficina?'},
+    {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Este espacio es tuyo.'},
+  ],
+
+  'Gerencia General': [
+    {l:1, type:'radio', text:'Para tener una imagen clara del estado del negocio hoy, ¿qué tienes que hacer?', opts:['Consulto el sistema — está disponible en tiempo real','Le pido a alguien que me prepare un resumen o reporte','Reviso los archivos de Drive o los consolidados','Espero la reunión semanal o el informe del mes']},
+    {l:1, type:'radio', text:'¿Cuántas veces al mes tomas una decisión con información que luego resultó estar desactualizada o incorrecta?', opts:['Varias veces — es un problema frecuente','Al menos una vez al mes','Alguna vez','Rara vez']},
+    {l:2, type:'radio', text:'¿Cómo se enteran las áreas de lo que pasa en el resto de la empresa cuando lo necesitan?', opts:['El sistema comparte información entre áreas en tiempo real','Por reuniones, WhatsApp o correo — cada quien avisa lo suyo','Cada área maneja su información por separado','No hay un mecanismo claro — la información se fragmenta']},
+    {l:2, type:'radio', text:'Cuando hay un problema operacional (un trámite atrasado, una negociación perdida, un pago mal procesado), ¿cómo te enteras?', opts:['El sistema me alerta automáticamente','Alguien me lo reporta cuando ya es urgente','Me entero en la reunión o cuando pregunto','Muchas veces me entero tarde, cuando el daño ya está hecho']},
+    {l:2, type:'radio', text:'¿Qué métricas del negocio NO estás midiendo hoy que deberían estar disponibles siempre?', opts:['Rentabilidad real por vehículo (desde la compra hasta la venta)','Tiempo promedio de cada vehículo en cada etapa del proceso','Eficiencia y productividad por área','Todas las anteriores']},
+    {l:2, type:'textarea', text:'¿Cuál fue la última decisión estratégica importante que tomaste con información incorrecta o incompleta? ¿Qué impacto tuvo y qué hubieras necesitado?'},
+    {l:2, type:'textarea', text:'¿Qué información necesita la empresa que hoy simplemente no existe o es muy difícil de obtener?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría tener visibilidad total de todas las áreas en tiempo real — sin depender de reportes manuales de nadie?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto cambiaría la capacidad de decisión si la rentabilidad real por vehículo estuviera disponible desde el momento de la compra?', lo:'Poco cambio', hi:'Cambio radical'},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa de cómo opera la empresa, ¿qué tendría más impacto en el crecimiento?', opts:['Que las áreas dejen de depender de personas específicas para funcionar','Que la información fluya sola entre áreas sin que nadie tenga que reenviarla','Que las decisiones se tomen con datos reales en tiempo real','Que el negocio pueda crecer sin que la operación se rompa']},
+    {l:3, type:'textarea', text:'¿Qué cambio — que hoy parece imposible — transformaría completamente cómo se gestiona el negocio?'},
+    {l:3, type:'textarea', text:'¿Hay algo más que quieras contarnos? Este espacio es tuyo.'},
   ],
 };
 
@@ -575,8 +585,21 @@ function renderQuestion() {
 }
 
 function selectOpt(el, key, val) {
-  el.closest('.options').querySelectorAll('.opt-label').forEach(l => l.classList.remove('selected'));
+  el.closest('.options').querySelectorAll('.opt-label').forEach(l => {
+    l.classList.remove('selected');
+    const t = l.querySelector('.otro-txt');
+    if (t) t.style.display = 'none';
+  });
   el.classList.add('selected');
+  if (val === 'Otro — cuéntanos:') {
+    const t = el.querySelector('.otro-txt');
+    if (t) { t.style.display = 'block'; t.focus(); answers[key] = t.value || ''; }
+  } else {
+    answers[key] = val;
+  }
+}
+
+function saveOtro(key, val) {
   answers[key] = val;
 }
 
