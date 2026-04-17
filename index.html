@@ -610,8 +610,22 @@ function renderQuestion() {
   const saved = answers[key] || '';
 
   if (q.type === 'radio') {
+    const allOpts = [...q.opts, 'Otro — cuéntanos:'];
+    const savedOtro = (saved && !q.opts.includes(saved)) ? saved : '';
+    const otroSel = savedOtro !== '';
     inp.innerHTML = '<div class="options">' +
-      q.opts.map(o => `<label class="opt-label ${saved===o?'selected':''}" onclick="selectOpt(this,'${key}','${o.replace(/'/g,"\\'")}')"><input type="radio" name="${key}" value="${o}"><span class="opt-dot"></span>${o}</label>`).join('') +
+      allOpts.map((o, idx) => {
+        const isOtro = idx === allOpts.length - 1;
+        const isSel = isOtro ? otroSel : saved === o;
+        const safeO = o.replace(/'/g, "\\'");
+        return `<label class="opt-label ${isSel?'selected':''}" onclick="selectOpt(this,'${key}','${safeO}')">
+          <input type="radio" name="${key}" value="${o}"><span class="opt-dot"></span>${o}
+          ${isOtro ? `<input type="text" class="otro-txt" id="otro-${key}" placeholder="Escribe aquí..."
+            value="${savedOtro}" onclick="event.stopPropagation()"
+            oninput="saveOtro('${key}',this.value)"
+            style="display:${isSel?'block':'none'}">` : ''}
+        </label>`;
+      }).join('') +
     '</div>';
   } else if (q.type === 'textarea') {
     inp.innerHTML = `<textarea id="ta-${key}" maxlength="400" placeholder="Escribe libremente..." oninput="saveTA('${key}',this)">${saved}</textarea><div class="char-count" id="cc-${key}">${saved.length} / 400</div>`;
