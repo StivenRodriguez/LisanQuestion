@@ -787,6 +787,24 @@ function resetForm() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function showFinalThanks() {
+  document.getElementById('done-body').innerHTML = `
+    <div style="text-align:center;padding:1.5rem 0 0.5rem">
+      <div style="font-size:36px;margin-bottom:16px">🙌</div>
+      <h3 style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:10px">¡Gracias por tu tiempo y tu confianza!</h3>
+      <p style="font-size:14px;color:var(--muted);line-height:1.75;max-width:380px;margin:0 auto 1.75rem">
+        Cada respuesta que llega nos acerca más a construir algo que realmente funcione para el equipo.<br>
+        <strong style="color:var(--orange)">Esto lo estamos haciendo juntos.</strong>
+      </p>
+      <button class="btn-reset" onclick="resetForm()" style="padding:13px 32px;border-radius:50px;font-size:14px;font-weight:500;border:2px solid var(--navy);color:var(--navy);background:white;cursor:pointer;transition:all .15s"
+        onmouseover="this.style.background='var(--navy)';this.style.color='white'"
+        onmouseout="this.style.background='white';this.style.color='var(--navy)'">
+        Llenar otra respuesta
+      </button>
+    </div>
+  `;
+}
+
 function showDone() {
   const nombre = document.getElementById('nombre').value.trim().split(' ')[0];
   document.getElementById('done-nombre').textContent = nombre || 'gracias';
@@ -803,7 +821,7 @@ function sendExtra() {
   const params = new URLSearchParams({ ...payload, tipo: 'comentario_final', callback: cbName });
   window[cbName] = function() {
     delete window[cbName];
-    btn.textContent = '¡Enviado! Gracias 🙌';
+    showFinalThanks();
   };
   const s = document.createElement('script');
   s.onerror = () => { window[cbName](); };
