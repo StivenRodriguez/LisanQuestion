@@ -719,13 +719,12 @@ function submitForm() {
   btn.disabled = true;
 
   function showSuccess() {
-    document.getElementById('form-wrap').classList.add('hidden');
-    document.getElementById('nav-wrap').classList.add('hidden');
+    document.getElementById('form-wrap').style.display = 'none';
+    document.getElementById('nav-wrap').style.display = 'none';
+    document.getElementById('progress-wrap').style.display = 'none';
     document.getElementById('done-screen').classList.remove('hidden');
     showDone();
-    document.getElementById('prog-fill').style.width = '100%';
-    document.getElementById('prog-pct').textContent = '100%';
-    document.getElementById('prog-label').textContent = 'Completado';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   const callbackName = 'cb_' + Date.now();
@@ -774,9 +773,10 @@ function resetForm() {
 
   document.getElementById('step-0').classList.remove('hidden');
   document.getElementById('step-q').classList.add('hidden');
-  document.getElementById('form-wrap').classList.remove('hidden');
-  document.getElementById('nav-wrap').classList.remove('hidden');
+  document.getElementById('form-wrap').style.display = 'block';
+  document.getElementById('nav-wrap').style.display = 'flex';
   document.getElementById('done-screen').classList.add('hidden');
+  document.getElementById('progress-wrap').style.display = 'block';
   const ex = document.getElementById('done-extra-txt'); if(ex) ex.value='';
   const bx = document.getElementById('btn-send-extra'); if(bx){bx.disabled=false;bx.textContent='Enviar comentario →';}
 
