@@ -369,6 +369,7 @@
           <div class="area-card" onclick="selectArea(this,'Gerencia Comercial')">Gerencia Comercial</div>
           <div class="area-card" onclick="selectArea(this,'Área Comercial')">Área Comercial</div>
           <div class="area-card" onclick="selectArea(this,'Asistente Administrativo')">Asistente Administrativo</div>
+          <div class="area-card" onclick="selectArea(this,'Gerencia General')">Gerencia General</div>
         </div>
       <div id="step0-error" style="display:none;margin-top:10px;padding:10px 14px;background:#FEF2F2;border-radius:10px;border:1px solid #FCA5A5;font-size:13px;color:#DC2626;"></div>
       </div>
@@ -781,7 +782,9 @@ function resetForm() {
   const bx = document.getElementById('btn-send-extra'); if(bx){bx.disabled=false;bx.textContent='Enviar comentario →';}
 
   document.getElementById('btn-back').disabled = true;
-  document.getElementById('btn-next').textContent = 'Siguiente';
+  const btnN = document.getElementById('btn-next');
+  btnN.disabled = false;
+  btnN.innerHTML = 'Comenzar';
 
   updateProgress();
   window.scrollTo({ top: 0, behavior: 'smooth' });
