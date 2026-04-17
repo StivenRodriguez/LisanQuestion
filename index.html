@@ -51,6 +51,7 @@
   .options{display:flex;flex-direction:column;gap:8px}
   .opt-label{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-size:14px;color:var(--text);transition:all .15s;user-select:none}
   .opt-label:hover{background:var(--blue-l);border-color:#93C5FD}
+  .opt-label:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
   .opt-label input[type=radio]{display:none}
   .opt-label.selected{background:var(--orange-l);border-color:var(--orange);color:#C2410C;font-weight:500}
   .opt-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
@@ -61,6 +62,7 @@
   .area-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .area-card{padding:14px;border-radius:12px;border:1px solid var(--border);cursor:pointer;font-size:13px;font-weight:500;color:var(--text);text-align:center;transition:all .15s;background:white;line-height:1.4}
   .area-card:hover{background:var(--blue-l);border-color:#93C5FD}
+  .area-card:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
   .area-card.selected{background:var(--orange-l);border-color:var(--orange);color:#C2410C}
 
   input[type=text]{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--gray-l);transition:border-color .2s}
@@ -360,16 +362,16 @@
         <label class="field-label">Nombre</label>
         <input type="text" id="nombre" placeholder="Tu nombre completo" style="margin-bottom:1rem"/>
         <label class="field-label">Selecciona tu área</label>
-        <div class="area-grid" id="area-grid">
-          <div class="area-card" onclick="selectArea(this,'Alistamiento')">Alistamiento</div>
-          <div class="area-card" onclick="selectArea(this,'Coordinación de Créditos')">Coordinación de Créditos</div>
-          <div class="area-card" onclick="selectArea(this,'Contabilidad')">Contabilidad</div>
-          <div class="area-card" onclick="selectArea(this,'Trámites')">Trámites</div>
-          <div class="area-card" onclick="selectArea(this,'Tesorería')">Tesorería</div>
-          <div class="area-card" onclick="selectArea(this,'Gerencia Comercial')">Gerencia Comercial</div>
-          <div class="area-card" onclick="selectArea(this,'Área Comercial')">Área Comercial</div>
-          <div class="area-card" onclick="selectArea(this,'Asistente Administrativo')">Asistente Administrativo</div>
-          <div class="area-card" onclick="selectArea(this,'Gerencia General')">Gerencia General</div>
+        <div class="area-grid" id="area-grid" role="radiogroup" aria-label="Selecciona tu área de trabajo">
+          <div class="area-card" role="radio" aria-checked="false" tabindex="0" onclick="selectArea(this,'Alistamiento')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Alistamiento</div>
+          <div class="area-card" role="radio" aria-checked="false" tabindex="0" onclick="selectArea(this,'Coordinación de Créditos')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Coordinación de Créditos</div>
+          <div class="area-card" role="radio" aria-checked="false" tabindex="0" onclick="selectArea(this,'Contabilidad')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Contabilidad</div>
+          <div class="area-card" role="radio" aria-checked="false" tabindex="0" onclick="selectArea(this,'Trámites')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Trámites</div>
+          <div class="area-card" role="radio" aria-checked="false" tabindex="0" onclick="selectArea(this,'Tesorería')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Tesorería</div>
+          <div class="area-card" role="radio" aria-checked="false" tabindex="0" onclick="selectArea(this,'Gerencia Comercial')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Gerencia Comercial</div>
+          <div class="area-card" role="radio" aria-checked="false" tabindex="0" onclick="selectArea(this,'Área Comercial')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Área Comercial</div>
+          <div class="area-card" role="radio" aria-checked="false" tabindex="0" onclick="selectArea(this,'Asistente Administrativo')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Asistente Administrativo</div>
+          <div class="area-card" role="radio" aria-checked="false" tabindex="0" onclick="selectArea(this,'Gerencia General')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">Gerencia General</div>
         </div>
       <div id="step0-error" style="display:none;margin-top:10px;padding:10px 14px;background:#FEF2F2;border-radius:10px;border:1px solid #FCA5A5;font-size:13px;color:#DC2626;"></div>
       </div>
@@ -569,9 +571,15 @@ let questions = [];
 let answers = {};
 
 function selectArea(el, area) {
-  document.querySelectorAll('.area-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.area-card').forEach(c => {
+    c.classList.remove('selected');
+    c.setAttribute('aria-checked', 'false');
+  });
   el.classList.add('selected');
+  el.setAttribute('aria-checked', 'true');
   selectedArea = area;
+  const errEl = document.getElementById('step0-error');
+  if (errEl) errEl.style.display = 'none';
 }
 
 function updateProgress() {
@@ -614,43 +622,52 @@ function renderQuestion() {
     const allOpts = [...q.opts, 'Otro — cuéntanos:'];
     const savedOtro = (saved && !q.opts.includes(saved)) ? saved : '';
     const otroSel = savedOtro !== '';
-    inp.innerHTML = '<div class="options">' +
+    inp.innerHTML = '<div class="options" role="radiogroup" aria-label="Opciones de respuesta">' +
       allOpts.map((o, idx) => {
         const isOtro = idx === allOpts.length - 1;
         const isSel = isOtro ? otroSel : saved === o;
         const safeO = o.replace(/'/g, "\\'");
-        return `<label class="opt-label ${isSel?'selected':''}" onclick="selectOpt(this,'${key}','${safeO}')">
-          <input type="radio" name="${key}" value="${o}"><span class="opt-dot"></span>${o}
+        return `<label class="opt-label ${isSel?'selected':''}" role="radio" aria-checked="${isSel?'true':'false'}" tabindex="0" onclick="selectOpt(this,'${key}','${safeO}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
+          <input type="radio" name="${key}" value="${o}" tabindex="-1"><span class="opt-dot" aria-hidden="true"></span>${o}
           ${isOtro ? `<input type="text" class="otro-txt" id="otro-${key}" placeholder="Escribe aquí..."
             value="${savedOtro}" onclick="event.stopPropagation()"
             oninput="saveOtro('${key}',this.value)"
+            aria-label="Escribe tu respuesta personalizada"
             style="display:${isSel?'block':'none'}">` : ''}
         </label>`;
       }).join('') +
     '</div>';
   } else if (q.type === 'textarea') {
-    inp.innerHTML = `<textarea id="ta-${key}" maxlength="400" placeholder="Escribe libremente..." oninput="saveTA('${key}',this)">${saved}</textarea><div class="char-count" id="cc-${key}">${saved.length} / 400</div>`;
+    inp.innerHTML = `<textarea id="ta-${key}" maxlength="400" placeholder="Escribe libremente..." aria-label="${q.text.replace(/"/g, '&quot;')}" oninput="saveTA('${key}',this)">${saved}</textarea><div class="char-count" id="cc-${key}" aria-live="polite">${saved.length} / 400</div>`;
   } else if (q.type === 'scale') {
     const btns = [1,2,3,4,5].map(n =>
-      `<button class="scale-btn ${saved==n?'selected':''}" onclick="selectScale('${key}',${n},this)">${n}</button>`
+      `<button class="scale-btn ${saved==n?'selected':''}" role="radio" aria-checked="${saved==n?'true':'false'}" aria-label="${n} de 5" onclick="selectScale('${key}',${n},this)">${n}</button>`
     ).join('');
-    inp.innerHTML = `<div class="scale-row" id="sr-${key}">${btns}</div><div class="scale-labels"><span>${q.lo}</span><span>${q.hi}</span></div>`;
+    inp.innerHTML = `<div class="scale-row" id="sr-${key}" role="radiogroup" aria-label="Escala del 1 al 5">${btns}</div><div class="scale-labels"><span>${q.lo}</span><span>${q.hi}</span></div>`;
   }
 }
 
 function selectOpt(el, key, val) {
   el.closest('.options').querySelectorAll('.opt-label').forEach(l => {
     l.classList.remove('selected');
+    l.setAttribute('aria-checked', 'false');
     const t = l.querySelector('.otro-txt');
     if (t) t.style.display = 'none';
   });
   el.classList.add('selected');
+  el.setAttribute('aria-checked', 'true');
   if (val === 'Otro — cuéntanos:') {
     const t = el.querySelector('.otro-txt');
-    if (t) { t.style.display = 'block'; t.focus(); answers[key] = t.value || ''; }
+    if (t) {
+      t.style.display = 'block';
+      t.focus();
+      // Preserve any previously typed text (important when user toggles back to "Otro").
+      answers[key] = t.value || '';
+    }
   } else {
     answers[key] = val;
   }
+  hideQuestionError();
 }
 
 function saveOtro(key, val) {
@@ -658,14 +675,21 @@ function saveOtro(key, val) {
 }
 
 function selectScale(key, val, btn) {
-  document.getElementById('sr-' + key).querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  const row = document.getElementById('sr-' + key);
+  row.querySelectorAll('.scale-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.setAttribute('aria-checked', 'false');
+  });
   btn.classList.add('selected');
+  btn.setAttribute('aria-checked', 'true');
   answers[key] = String(val);
+  hideQuestionError();
 }
 
 function saveTA(key, el) {
   answers[key] = el.value;
   document.getElementById('cc-' + key).textContent = el.value.length + ' / 400';
+  if (el.value.trim().length >= 3) hideQuestionError();
 }
 
 function nav(dir) {
@@ -693,6 +717,15 @@ function nav(dir) {
     return;
   }
 
+  if (dir === 1 && currentStep > 0) {
+    const validation = validateCurrentAnswer();
+    if (!validation.ok) {
+      showQuestionError(validation.message);
+      return;
+    }
+    hideQuestionError();
+  }
+
   if (dir === 1 && currentStep === questions.length) { submitForm(); return; }
 
   currentStep = Math.max(0, Math.min(questions.length, currentStep + dir));
@@ -710,14 +743,76 @@ function nav(dir) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function submitForm() {
+function validateCurrentAnswer() {
+  const q = questions[currentStep - 1];
+  if (!q) return { ok: true };
+  const key = 'q' + currentStep;
+  const val = (answers[key] || '').toString().trim();
+
+  if (q.type === 'radio') {
+    if (!val) return { ok: false, message: 'Selecciona una opción para continuar.' };
+    return { ok: true };
+  }
+  if (q.type === 'scale') {
+    if (!val) return { ok: false, message: 'Selecciona un valor en la escala del 1 al 5.' };
+    return { ok: true };
+  }
+  if (q.type === 'textarea') {
+    // Last question ("¿Hay algo más?") is optional — allow empty.
+    if (currentStep === questions.length) return { ok: true };
+    if (val.length < 3) return { ok: false, message: 'Escribe una respuesta breve para continuar (puedes ser conciso).' };
+    return { ok: true };
+  }
+  return { ok: true };
+}
+
+function showQuestionError(message) {
+  let err = document.getElementById('q-error');
+  if (!err) {
+    err = document.createElement('div');
+    err.id = 'q-error';
+    err.setAttribute('role', 'alert');
+    err.setAttribute('aria-live', 'polite');
+    err.style.cssText = 'margin-top:12px;padding:10px 14px;background:#FEF2F2;border-radius:10px;border:1px solid #FCA5A5;font-size:13px;color:#DC2626;';
+    document.getElementById('q-card').appendChild(err);
+  }
+  err.textContent = message;
+  err.style.display = 'block';
+}
+
+function hideQuestionError() {
+  const err = document.getElementById('q-error');
+  if (err) err.style.display = 'none';
+}
+
+async function submitForm() {
   const nombre = document.getElementById('nombre').value.trim();
   const payload = { area: selectedArea, nombre: nombre };
   Object.entries(answers).forEach(([k, v]) => { payload[k] = v; });
 
   const btn = document.getElementById('btn-next');
-  btn.innerHTML = '<span class="spinner"></span>Enviando...';
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>Enviando...';
   btn.disabled = true;
+  btn.setAttribute('aria-busy', 'true');
+
+  try {
+    const body = new URLSearchParams(payload);
+    // mode: 'no-cors' to avoid CORS preflight on Apps Script.
+    // Response will be opaque but the request reaches Apps Script reliably.
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: body,
+    });
+    // If fetch resolves, the request left the browser successfully.
+    showSuccess();
+  } catch (err) {
+    btn.innerHTML = originalHtml;
+    btn.disabled = false;
+    btn.removeAttribute('aria-busy');
+    showSubmitError('No pudimos enviar tus respuestas. Revisa tu conexión e intenta de nuevo.');
+  }
 
   function showSuccess() {
     document.getElementById('form-wrap').style.display = 'none';
@@ -727,39 +822,19 @@ function submitForm() {
     showDone();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+}
 
-  const callbackName = 'cb_' + Date.now();
-  let done = false;
-
-  // Timeout: if callback doesn't fire in 6s, show success anyway
-  // (data almost certainly reached Apps Script)
-  const timeout = setTimeout(function() {
-    if (!done) { done = true; showSuccess(); }
-  }, 6000);
-
-  window[callbackName] = function() {
-    if (done) return;
-    done = true;
-    clearTimeout(timeout);
-    delete window[callbackName];
-    showSuccess();
-  };
-
-  const params = new URLSearchParams(payload);
-  params.set('callback', callbackName);
-
-  const script = document.createElement('script');
-  script.onload = function() {
-    // Give callback 500ms to execute, then force success
-    setTimeout(function() {
-      if (!done) { done = true; clearTimeout(timeout); showSuccess(); }
-    }, 500);
-  };
-  script.onerror = function() {
-    if (!done) { done = true; clearTimeout(timeout); showSuccess(); }
-  };
-  script.src = SCRIPT_URL + '?' + params.toString();
-  document.body.appendChild(script);
+function showSubmitError(msg) {
+  let box = document.getElementById('submit-error');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'submit-error';
+    box.setAttribute('role', 'alert');
+    box.style.cssText = 'margin-top:12px;padding:12px 14px;background:#FEF2F2;border-radius:10px;border:1px solid #FCA5A5;font-size:13px;color:#DC2626;';
+    document.getElementById('nav-wrap').parentNode.insertBefore(box, document.getElementById('nav-wrap').nextSibling);
+  }
+  box.textContent = msg;
+  box.style.display = 'block';
 }
 
 function resetForm() {
@@ -813,23 +888,43 @@ function showDone() {
   document.getElementById('done-nombre').textContent = nombre || 'gracias';
 }
 
-function sendExtra() {
+async function sendExtra() {
   const txt = document.getElementById('done-extra-txt').value.trim();
   const btn = document.getElementById('btn-send-extra');
-  if (!txt) { btn.textContent = 'Escribe algo primero 😊'; setTimeout(()=>btn.textContent='Enviar comentario →',2000); return; }
+  if (!txt) {
+    btn.textContent = 'Escribe algo primero 😊';
+    setTimeout(() => btn.textContent = 'Enviar comentario →', 2000);
+    return;
+  }
+  const originalText = 'Enviar comentario →';
   btn.disabled = true;
+  btn.setAttribute('aria-busy', 'true');
   btn.textContent = 'Enviando...';
-  const payload = { area: selectedArea, nombre: document.getElementById('nombre').value.trim(), comentario_final: txt };
-  const cbName = 'cb_extra_' + Date.now();
-  const params = new URLSearchParams({ ...payload, tipo: 'comentario_final', callback: cbName });
-  window[cbName] = function() {
-    delete window[cbName];
-    showFinalThanks();
+
+  const payload = {
+    tipo: 'comentario_final',
+    area: selectedArea,
+    nombre: document.getElementById('nombre').value.trim(),
+    comentario_final: txt,
   };
-  const s = document.createElement('script');
-  s.onerror = () => { window[cbName](); };
-  s.src = SCRIPT_URL + '?' + params.toString();
-  document.body.appendChild(s);
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: new URLSearchParams(payload),
+    });
+    showFinalThanks();
+  } catch (err) {
+    btn.disabled = false;
+    btn.removeAttribute('aria-busy');
+    btn.textContent = 'Reintentar envío';
+    const hint = document.querySelector('.done-extra-hint');
+    if (hint) {
+      hint.textContent = 'No pudimos enviar tu comentario. Revisa tu conexión e intenta de nuevo.';
+      hint.style.color = '#DC2626';
+    }
+  }
 }
 
 function startSurvey() {
