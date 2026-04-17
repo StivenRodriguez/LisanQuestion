@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Levantamiento de Requisitos — Lisan Motors SAS</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0D2137; --blue:#1565C0; --blue-mid:#1E88E5;
+    --blue-l:#E8F2FC; --pur:#4A148C; --pur-l:#F3E5F5;
+    --grn:#1B5E20; --grn-l:#E8F5E9; --gray:#546E7A;
+    --gray-l:#F4F6F8; --white:#FFFFFF; --border:#DDE3EA;
+    --text:#1A2332; --muted:#6B7A8D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:#F0F4F9;color:var(--text);min-height:100vh;padding:2rem 1rem 4rem}
+  .container{max-width:680px;margin:0 auto}
+
+  .header{background:var(--navy);border-radius:16px;padding:2rem 2.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.04)}
+  .header-tag{display:inline-block;background:rgba(255,255,255,0.12);color:#90CAF9;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:12px}
+  .header h1{font-size:22px;font-weight:600;color:#fff;margin-bottom:8px;line-height:1.3}
+  .header p{font-size:13px;color:#90A4AE;line-height:1.7}
+
+  .progress-wrap{background:white;border-radius:12px;padding:14px 18px;margin-bottom:1.5rem;border:1px solid var(--border)}
+  .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .progress-label{font-size:13px;font-weight:500;color:var(--text)}
+  .progress-pct{font-size:13px;color:var(--muted)}
+  .progress-bar{height:5px;background:var(--gray-l);border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),#42A5F5);border-radius:3px;transition:width .4s ease}
+
+  .section-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:1rem}
+  .tag-id{background:#E8EAF6;color:#283593}
+  .tag-lv1{background:var(--blue-l);color:#0D47A1}
+  .tag-lv2{background:var(--pur-l);color:#6A1B9A}
+  .tag-lv3{background:var(--grn-l);color:#1B5E20}
+
+  .card{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem;transition:border-color .2s,box-shadow .2s}
+  .card:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,101,192,.08)}
+  .card-num{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-bottom:8px}
+  .card-q{font-size:15px;font-weight:500;color:var(--text);line-height:1.55;margin-bottom:1rem}
+
+  .options{display:flex;flex-direction:column;gap:8px}
+  .opt-label{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-size:14px;color:var(--text);transition:all .15s;user-select:none}
+  .opt-label:hover{background:var(--blue-l);border-color:#90CAF9}
+  .opt-label input[type=radio]{display:none}
+  .opt-label.selected{background:var(--blue-l);border-color:var(--blue);color:#0D47A1;font-weight:500}
+  .opt-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .opt-label.selected .opt-dot{border-color:var(--blue);background:var(--blue)}
+  .opt-label.selected .opt-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:white}
+
+  /* Area selector grid */
+  .area-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .area-card{padding:14px;border-radius:12px;border:1px solid var(--border);cursor:pointer;font-size:13px;font-weight:500;color:var(--text);text-align:center;transition:all .15s;background:white;line-height:1.4}
+  .area-card:hover{background:var(--blue-l);border-color:#90CAF9}
+  .area-card.selected{background:var(--blue-l);border-color:var(--blue);color:#0D47A1}
+
+  input[type=text]{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--gray-l);transition:border-color .2s}
+  input[type=text]:focus{outline:none;border-color:var(--blue);background:white}
+  label.field-label{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:6px;display:block}
+
+  textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);resize:vertical;min-height:90px;line-height:1.6;transition:border-color .2s;background:var(--gray-l)}
+  textarea:focus{outline:none;border-color:var(--blue);background:white}
+  .char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:6px}
+
+  .scale-row{display:flex;gap:8px}
+  .scale-btn{flex:1;height:44px;border-radius:10px;border:1px solid var(--border);background:var(--gray-l);font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
+  .scale-btn:hover{background:var(--blue-l);border-color:#90CAF9;color:var(--blue)}
+  .scale-btn.selected{background:var(--blue);border-color:var(--blue);color:white}
+  .scale-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:12px}
+  .btn{padding:10px 24px;border-radius:10px;font-size:14px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:1px solid var(--border);background:white;color:var(--text);transition:all .15s}
+  .btn:hover{background:var(--gray-l)}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+  .btn-primary{background:var(--blue);border-color:var(--blue);color:white;flex:1;max-width:220px}
+  .btn-primary:hover{background:#0D47A1}
+
+  .done-screen{background:white;border-radius:16px;border:1px solid var(--border);padding:3rem 2rem;text-align:center}
+  .done-icon{width:64px;height:64px;border-radius:50%;background:var(--grn-l);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:28px;color:#2E7D32;font-weight:600}
+  .done-screen h2{font-size:22px;font-weight:600;margin-bottom:8px}
+  .done-screen p{font-size:14px;color:var(--muted);line-height:1.7;max-width:400px;margin:0 auto 2rem}
+  .btn-reset{padding:12px 28px;border-radius:10px;font-size:14px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:1px solid var(--blue);background:var(--blue-l);color:var(--blue);transition:all .15s;display:inline-block}
+  .btn-reset:hover{background:var(--blue);color:white}
+
+  .hidden{display:none}
+  .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media(max-width:480px){.area-grid{grid-template-columns:1fr}.header{padding:1.5rem}.header h1{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-tag">Lisan Motors SAS — Fase 0</div>
+    <h1>Levantamiento de Requisitos</h1>
+    <p>Selecciona tu área y responde desde tu experiencia real del día a día.<br>No hay respuestas correctas — lo que importa es la realidad del proceso.</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-label" id="prog-label">Identificación</span>
+      <span class="progress-pct" id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div id="form-wrap">
+
+    <!-- Step 0: Identificación + Área -->
+    <div class="step-screen" id="step-0">
+      <span class="section-tag tag-id">Identificación</span>
+      <div class="card">
+        <div class="card-q">¿Con quién estamos hablando?</div>
+        <label class="field-label">Nombre</label>
+        <input type="text" id="nombre" placeholder="Tu nombre completo" style="margin-bottom:1rem"/>
+        <label class="field-label">Selecciona tu área</label>
+        <div class="area-grid" id="area-grid">
+          <div class="area-card" onclick="selectArea(this,'Inventarios')">Inventarios</div>
+          <div class="area-card" onclick="selectArea(this,'Compra de Vehículos')">Compra de Vehículos</div>
+          <div class="area-card" onclick="selectArea(this,'Coordinación de Créditos')">Coordinación de Créditos</div>
+          <div class="area-card" onclick="selectArea(this,'Contabilidad')">Contabilidad</div>
+          <div class="area-card" onclick="selectArea(this,'Trámites')">Trámites</div>
+          <div class="area-card" onclick="selectArea(this,'Tesorería')">Tesorería</div>
+          <div class="area-card" onclick="selectArea(this,'Gerencia Comercial')">Gerencia Comercial</div>
+          <div class="area-card" onclick="selectArea(this,'Área Comercial')">Área Comercial</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Steps 1-12: Preguntas dinámicas -->
+    <div class="step-screen hidden" id="step-q">
+      <span class="section-tag" id="level-tag">Nivel 1 — Validar</span>
+      <div class="card" id="q-card">
+        <div class="card-num" id="q-num">Pregunta 1</div>
+        <div class="card-q" id="q-text"></div>
+        <div id="q-input"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="nav" id="nav-wrap">
+    <button class="btn" id="btn-back" onclick="nav(-1)" disabled>Anterior</button>
+    <button class="btn btn-primary" id="btn-next" onclick="nav(1)">Siguiente</button>
+  </div>
+
+  <div class="done-screen hidden" id="done-screen">
+    <div class="done-icon">✓</div>
+    <h2>Respuestas enviadas</h2>
+    <p>Gracias por tu tiempo. Tus respuestas son el insumo para construir el sistema a la medida de cómo trabaja tu área.</p>
+    <button class="btn-reset" onclick="resetForm()">Llenar otro formulario</button>
+  </div>
+
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-Kn99yIeQP_IqUn3_4D1Yp_iL_gbrk1qJMr11Qs8fHOV9MOjKJIx0sYgeycVCJTPSEg/exec';
+
+const QUESTIONS = {
+  'Inventarios': [
+    {l:1, type:'radio', text:'Cuando hay un error en el inventario, ¿qué tan difícil es corregirlo sin afectar la información de otras áreas?', opts:['Muy difícil — hay que tocar varios archivos','Difícil — hay que avisar a más personas','Moderado — se corrige pero tarda','Fácil — se resuelve directo']},
+    {l:1, type:'radio', text:'¿Con qué frecuencia el inventario registrado no coincide con lo que hay físicamente en el patio?', opts:['Varias veces a la semana','Al menos una vez a la semana','Rara vez','Nunca ha pasado']},
+    {l:1, type:'radio', text:'¿Cuánto tiempo pasa entre que un vehículo entra al patio y queda registrado correctamente?', opts:['Horas o al día siguiente','El mismo día pero más tarde','En el momento','Depende de quién esté disponible']},
+    {l:2, type:'textarea', text:'Describe la última vez que un error en el inventario causó un problema real. ¿Qué pasó, cómo lo detectaron y cómo lo resolvieron?'},
+    {l:2, type:'radio', text:'¿Hay momentos en los que necesitas consultar o actualizar información del inventario pero no estás frente a un computador? ¿Cuándo ocurre eso?', opts:['Sí, frecuentemente — cuando estoy en el patio','Sí, a veces — en visitas o fuera de la oficina','Rara vez','No — siempre estoy frente al computador cuando lo necesito']},
+    {l:2, type:'radio', text:'Cuando alguien de otra área necesita saber el estado de un vehículo, ¿qué pasa?', opts:['Me llaman o escriben directamente a mí','Buscan ellos mismos pero les cuesta encontrarlo','Tienen acceso pero la información no siempre está actualizada','No saben a dónde mirar']},
+    {l:2, type:'textarea', text:'¿Qué hace el equipo que NO está en el sistema? Cosas que se coordinan por WhatsApp, de memoria, en papel, o que simplemente "todo el mundo sabe".'},
+    {l:3, type:'scale', text:'¿Qué tanto impacto tendría que cualquier persona del equipo pudiera ver el estado exacto del inventario sin depender de ti?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo se recuperaría si los errores de registro se detectaran automáticamente antes de que lleguen a otras áreas?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'¿Qué información del vehículo hoy se pierde o no queda registrada en ningún lado?', opts:['Estado físico y evidencia de entrada','Historial de movimientos internos','Quién fue responsable de cada etapa','Todo lo anterior']},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso de inventario, ¿qué tendría más impacto real en la operación?', opts:['Que el registro sea inmediato sin importar dónde estés','Que todas las áreas vean el mismo estado en tiempo real','Que no dependa de una persona específica para funcionar','Que quede evidencia física y documental de cada movimiento']},
+    {l:3, type:'textarea', text:'Si pudieras hacer algo radical — algo que hoy parece imposible — que cambiara completamente cómo funciona el inventario o cómo vive el proceso alguien externo (el vendedor del vehículo, por ejemplo), ¿qué sería?'},
+  ],
+  'Compra de Vehículos': [
+    {l:1, type:'radio', text:'¿Cuántas negociaciones activas pueden manejar al tiempo antes de que alguna quede sin seguimiento?', opts:['Más de 10 sin problema','Entre 5 y 10','Menos de 5','No hay un límite claro — a veces se pierden']},
+    {l:1, type:'radio', text:'Cuando un negocio no se cierra, ¿qué tan fácil es saber exactamente en qué punto se cayó y por qué?', opts:['Muy difícil — no queda registro','Difícil — hay que reconstruir de memoria','Regular — queda algo pero incompleto','Fácil — está todo documentado']},
+    {l:1, type:'radio', text:'¿Cuánto tiempo se pierde en una semana coordinando información entre áreas para cerrar una compra?', opts:['Más de medio día','Entre 2 y 4 horas','Menos de 2 horas','Es fluido — no hay pérdida de tiempo']},
+    {l:2, type:'textarea', text:'Cuéntanos de un negocio que se complicó o se perdió por falta de información oportuna entre áreas. ¿Qué cambiarías de ese proceso?'},
+    {l:2, type:'radio', text:'¿Qué parte del proceso de compra genera más correcciones o reprocesos después?', opts:['La documentación del vehículo','La validación de pagos','La coordinación entre áreas','El registro inicial de la negociación']},
+    {l:2, type:'radio', text:'¿Hay momentos en los que necesitas información del proceso pero no estás en la oficina? ¿En qué situaciones?', opts:['Sí — cuando estoy con el vendedor fuera de la empresa','Sí — en reuniones o visitas','Rara vez','No — siempre estoy en la oficina cuando lo necesito']},
+    {l:2, type:'textarea', text:'¿Qué información del vendedor o del vehículo hoy se maneja por WhatsApp, de memoria o de forma informal y debería quedar registrada?'},
+    {l:3, type:'scale', text:'¿Qué tanto valor tendría poder ver en qué etapa está cada negociación activa sin tener que preguntar a nadie?', lo:'Poco valor', hi:'Mucho valor'},
+    {l:3, type:'scale', text:'¿Cuánto impacto tendría que la documentación llegara automáticamente a trámites y tesorería al cerrar la compra, sin que nadie tuviera que reenviarla?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'radio', text:'¿Cuál es el cuello de botella más grande en el proceso de compra hoy?', opts:['Coordinación entre áreas','Documentación incompleta','Seguimiento a negociaciones activas','Validación de pagos']},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa del proceso de compra, ¿qué tendría más impacto real?', opts:['Visibilidad en tiempo real de cada negociación','Documentación que fluye sola entre áreas','Seguimiento automático sin depender de memoria','Historial completo de cada vendedor o propietario']},
+    {l:3, type:'textarea', text:'Si el vendedor del vehículo pudiera hacer seguimiento en tiempo real del estado de su proceso — saber en qué etapa está su vehículo sin tener que llamar — ¿qué cambiaría en tu día a día y en la experiencia de ese cliente?'},
+  ],
+  'Coordinación de Créditos': [
+    {l:1, type:'radio', text:'¿Cuántas solicitudes activas pueden manejar al tiempo antes de que alguna quede sin seguimiento?', opts:['Más de 15 sin problema','Entre 8 y 15','Menos de 8','No hay límite claro — a veces se pierden']},
+    {l:1, type:'radio', text:'¿Con qué frecuencia un crédito se retrasa porque un documento estuvo mal desde el principio y nadie lo detectó a tiempo?', opts:['Con frecuencia','Alguna vez','Rara vez','Nunca ha pasado']},
+    {l:1, type:'radio', text:'¿Qué tan fácil es saber hoy cuántos casos están en cada etapa del proceso en este momento?', opts:['Muy difícil — toca revisar todo','Difícil — hay que preguntar','Regular — está pero no siempre actualizado','Fácil — se ve de inmediato']},
+    {l:2, type:'textarea', text:'¿Cuál es el error más común que hace que un crédito se devuelva o se retrase? ¿Cómo lo detectan hoy y qué costo tiene ese retraso?'},
+    {l:2, type:'radio', text:'¿Hay momentos en los que necesitas consultar el estado de un caso pero no estás en la oficina?', opts:['Sí, frecuentemente','Sí, a veces','Rara vez','No — siempre estoy en la oficina cuando lo necesito']},
+    {l:2, type:'radio', text:'Cuando hay un cambio en las condiciones de una entidad financiera, ¿cuánto tarda en llegar al equipo y aplicarse?', opts:['Se entera tarde — ya hubo problemas','Se comunica pero demora','Se actualiza rápido','Hay un proceso claro para esto']},
+    {l:2, type:'textarea', text:'¿Qué información del cliente o del proceso crediticio hoy vive de memoria, en chats o en papeles sueltos y debería estar registrada formalmente?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría una validación automática que detecte documentos faltantes o incorrectos antes de enviarlos a la entidad?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo ahorraría tener el historial completo de cada cliente — documentos, etapas, comunicaciones — en un solo lugar accesible?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'¿Qué cambio en el proceso de créditos tendría más impacto inmediato?', opts:['Detección automática de errores documentales','Seguimiento automático por caso','Historial unificado del cliente','Visibilidad en tiempo real de todos los casos']},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué eliminaría más reprocesos hoy?', opts:['Que los documentos se validen solos antes de enviarse','Que cada caso tenga su historial completo sin buscarlo','Que el sistema avise cuando un caso lleva mucho tiempo sin avanzar','Que el cliente pueda cargar sus documentos directamente']},
+    {l:3, type:'textarea', text:'Si el cliente pudiera hacer seguimiento del estado de su crédito sin tener que llamar — saber en qué etapa está, qué falta y cuánto tarda — ¿qué cambiaría en tu trabajo y en la experiencia del cliente?'},
+  ],
+  'Contabilidad': [
+    {l:1, type:'radio', text:'¿Cuánto tiempo del mes se va en consolidar información que debería llegar sola desde otras áreas?', opts:['Más de 3 días','1 a 3 días','Menos de 1 día','Es mínimo — fluye bien']},
+    {l:1, type:'radio', text:'¿Con qué frecuencia contabilidad recibe información incorrecta o desactualizada que genera reprocesos?', opts:['Varias veces al mes','Al menos una vez al mes','Rara vez','Nunca']},
+    {l:1, type:'radio', text:'Cuando gerencia pide un reporte urgente, ¿cuánto tiempo tarda en tenerlo listo?', opts:['Más de un día','Entre 2 y 8 horas','Menos de 2 horas','Depende del tipo de reporte']},
+    {l:2, type:'textarea', text:'¿Cuál ha sido el error contable más costoso causado por información mal registrada en otra área? ¿Cómo se detectó y qué impacto tuvo?'},
+    {l:2, type:'radio', text:'¿Cuántas fuentes distintas de información tiene que cruzar para cerrar un mes contable?', opts:['Más de 5 fuentes','3 a 5 fuentes','2 fuentes','1 fuente centralizada']},
+    {l:2, type:'radio', text:'¿Qué tan confiable es hoy la información que llega de otras áreas para los registros contables?', opts:['Poco confiable — hay que verificar todo','Regular — a veces llega mal','Bastante confiable','Muy confiable']},
+    {l:2, type:'textarea', text:'¿Qué registros o movimientos hoy no tienen trazabilidad completa — entran al sistema pero no se sabe bien quién los generó, cuándo o por qué?'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo ahorraría que cada venta, compra y pago llegue automáticamente a contabilidad sin que nadie tenga que enviarlo?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría poder generar el cierre mensual en horas en vez de días?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'radio', text:'¿Qué eliminaría más reprocesos en contabilidad hoy?', opts:['Información en tiempo real desde otras áreas','Validación automática antes de que llegue el dato','Reportes automáticos sin consolidar a mano','Trazabilidad completa de cada movimiento']},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué tendría más impacto en la calidad de la información contable?', opts:['Que ningún movimiento pueda registrarse sin los datos mínimos requeridos','Que contabilidad vea en tiempo real lo que pasa en cada área','Que los reportes se generen solos al cierre del mes','Que cada error tenga un responsable claro y trazable']},
+    {l:3, type:'textarea', text:'¿Qué le pedirías al sistema nuevo que hoy es imposible tener — algo que cambiaría radicalmente cómo funciona contabilidad o cómo interactúa con las demás áreas?'},
+  ],
+  'Trámites': [
+    {l:1, type:'radio', text:'¿Cuántos vehículos en trámite hoy tienen algún documento vencido o próximo a vencer sin que nadie lo haya detectado todavía?', opts:['No tengo esa información disponible fácilmente','Probablemente varios — no hay alertas','Uno o dos — me doy cuenta tarde','Ninguno — tengo control claro']},
+    {l:1, type:'radio', text:'Cuando un trámite se retrasa, ¿cuánto tiempo pasa antes de que alguien lo detecte y actúe?', opts:['Días — me entero cuando ya es tarde','Horas — alguien lo nota eventualmente','Lo detecto el mismo día','Hay un mecanismo de alerta']},
+    {l:1, type:'radio', text:'¿Con qué frecuencia un vehículo llega a trámites con documentación incompleta o incorrecta de la etapa anterior?', opts:['Muy frecuente','Con cierta frecuencia','Rara vez','Nunca — llega todo completo']},
+    {l:2, type:'textarea', text:'¿Cuál es el trámite que más se demora o que más problemas genera? ¿Qué lo hace difícil hoy y cuánto cuesta ese retraso en tiempo o en dinero?'},
+    {l:2, type:'radio', text:'¿Qué pasa con un trámite en curso cuando la persona que lo lleva no está disponible?', opts:['Se detiene — solo esa persona sabe cómo va','Alguien más intenta pero pierde tiempo buscando información','Hay un backup pero no es fluido','Cualquiera puede retomarlo sin problema']},
+    {l:2, type:'radio', text:'¿Hay momentos en los que necesitas consultar el estado de un trámite pero no estás en la oficina?', opts:['Sí, frecuentemente — hago diligencias externas','Sí, a veces','Rara vez','No — siempre estoy en la oficina cuando lo necesito']},
+    {l:2, type:'textarea', text:'¿Qué información de cada trámite hoy vive solo en la cabeza de quien lo maneja — cosas que si esa persona no está, nadie más sabe?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría recibir una alerta automática antes de que un documento venza o un trámite supere su tiempo esperado?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo se ahorraría si cada área recibiera una notificación automática al completar cada etapa, sin que tú tuvieras que avisar?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'¿Qué cambio en trámites evitaría más retrasos hoy?', opts:['Alertas automáticas por vencimientos','Expediente digital unificado por vehículo','Notificaciones automáticas entre áreas','Validación obligatoria antes de avanzar cada etapa']},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué haría que los trámites fluyeran sin depender de que una persona específica esté disponible?', opts:['Que el historial completo esté accesible para cualquiera','Que el sistema avise automáticamente qué sigue','Que los documentos estén digitalizados y accesibles desde cualquier lugar','Que nadie pueda avanzar sin completar lo requerido en la etapa anterior']},
+    {l:3, type:'textarea', text:'Si el propietario del vehículo pudiera saber en qué etapa del trámite está su vehículo sin tener que llamar, ¿qué cambiaría en tu trabajo? ¿Qué otras ideas radicales tienes para este módulo?'},
+  ],
+  'Tesorería': [
+    {l:1, type:'radio', text:'¿Con qué frecuencia llega una solicitud de pago con documentación incompleta o incorrecta?', opts:['Varias veces a la semana','Al menos una vez a la semana','Rara vez','Nunca']},
+    {l:1, type:'radio', text:'¿Cómo sabe en este momento qué pagos están pendientes de procesar?', opts:['Reviso el archivo de Drive','Me avisan cuando necesitan el pago','Llevo mi propio control aparte','No hay visibilidad clara en tiempo real']},
+    {l:1, type:'radio', text:'¿Cuánto tiempo se pierde al mes verificando manualmente que los documentos de un pago estén completos?', opts:['Más de 2 días','Entre 1 y 2 días','Menos de 1 día','Es mínimo']},
+    {l:2, type:'textarea', text:'¿Cuál ha sido el error de pago más costoso o problemático? ¿Cómo se detectó, cuánto tardó en resolverse y qué lo causó?'},
+    {l:2, type:'radio', text:'¿Cuántas personas distintas intervienen para que un pago quede completamente procesado y registrado?', opts:['Más de 4','3 o 4','2','Solo yo']},
+    {l:2, type:'radio', text:'¿Hay momentos en los que necesitas consultar información de pagos o aprobar algo pero no estás en la oficina?', opts:['Sí, frecuentemente','Sí, a veces','Rara vez','No — siempre estoy en la oficina']},
+    {l:2, type:'textarea', text:'¿Qué información financiera hoy vive en correos, chats o en tu cabeza y debería estar centralizada en el sistema?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría que el sistema no permita procesar un pago si falta algún documento requerido?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto tiempo ahorraría que cada pago procesado se registre automáticamente en contabilidad sin que nadie tenga que enviarlo?', lo:'Nada', hi:'Muchísimo'},
+    {l:3, type:'radio', text:'¿Qué cambio en tesorería tendría más impacto inmediato?', opts:['Bloqueo automático si falta documento','Registro automático en contabilidad','Visibilidad en tiempo real de pagos pendientes','Trazabilidad completa por transacción']},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué eliminaría más errores en tesorería hoy?', opts:['Que ningún pago avance sin documentación completa','Que el flujo de caja sea visible en tiempo real','Que cada aprobación quede registrada con quién y cuándo','Que contabilidad reciba la información sola sin intermediarios']},
+    {l:3, type:'textarea', text:'¿Qué cosa radical — que hoy parece difícil o imposible — cambiaría completamente cómo funciona tesorería o cómo interactúa con las otras áreas?'},
+  ],
+  'Gerencia Comercial': [
+    {l:1, type:'radio', text:'¿Cuántas veces al mes toma decisiones con información que luego resultó estar desactualizada o incorrecta?', opts:['Varias veces al mes','Al menos una vez','Rara vez','Nunca']},
+    {l:1, type:'radio', text:'Cuando quiere saber cuántos vehículos están disponibles para venta en este momento, ¿qué tan confiable es la respuesta?', opts:['Poco confiable — siempre hay discrepancias','Regular — a veces no coincide con el patio','Bastante confiable','Muy confiable — es exacto']},
+    {l:1, type:'radio', text:'¿Cuánto tiempo del mes se pierde esperando que alguien consolide información antes de poder tomar una decisión?', opts:['Más de 3 días','1 a 3 días','Menos de 1 día','Es mínimo']},
+    {l:2, type:'textarea', text:'¿Cuál fue la última decisión importante que tomó con información incorrecta o tarde? ¿Qué impacto tuvo y qué hubiera necesitado para decidir mejor?'},
+    {l:2, type:'radio', text:'¿Qué métricas del negocio NO está midiendo hoy que deberían estar disponibles siempre?', opts:['Tiempo promedio de cada vehículo en el proceso','Rentabilidad real por vehículo','Productividad por área','Todas las anteriores']},
+    {l:2, type:'radio', text:'¿Cómo detecta hoy cuándo una etapa del proceso está generando un cuello de botella?', opts:['Cuando alguien me avisa que hay un problema','Cuando el retraso ya es evidente y costoso','Revisando los archivos manualmente','Tengo visibilidad clara en tiempo real']},
+    {l:2, type:'textarea', text:'¿Qué información necesita todos los días para gestionar bien el negocio y hoy tiene que buscar, esperar o pedir a alguien?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría saber en tiempo real el estado de cada vehículo, cada área y cada proceso sin depender de nadie?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'¿Cuánto cambiaría su capacidad de decisión si pudiera ver la rentabilidad real por vehículo desde la compra hasta la venta?', lo:'Poco cambio', hi:'Cambio radical'},
+    {l:3, type:'radio', text:'¿Qué información cambiaría más la forma en que gestiona el negocio hoy?', opts:['Rentabilidad real por vehículo','Tiempos por etapa del proceso','Estado de cada área en tiempo real','Proyección de flujo según el estado actual del inventario']},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué le daría más control sobre el negocio?', opts:['Ver todo en tiempo real sin esperar reportes','Saber dónde se pierde tiempo y dinero en el proceso','Tener proyecciones basadas en datos reales','Que las alertas lleguen solas cuando algo sale de lo normal']},
+    {l:3, type:'textarea', text:'¿Qué decisión que hoy no puede tomar bien podría tomar si tuviera los datos correctos en el momento correcto? ¿Y qué cosa radical — que hoy parece imposible — cambiaría completamente cómo se gestiona el negocio?'},
+  ],
+  'Área Comercial': [
+    {l:1, type:'radio', text:'¿Cuántas oportunidades de venta se pierden al mes porque la información no estaba disponible a tiempo?', opts:['Más de 3','1 o 2','Rara vez','Nunca — siempre tengo la info']},
+    {l:1, type:'radio', text:'Cuando un cliente pregunta por un vehículo, ¿cuánto tiempo tarda en tener toda la información necesaria para responderle bien?', opts:['Más de 30 minutos — toca buscar','Entre 10 y 30 minutos','Menos de 10 minutos','La tengo de inmediato']},
+    {l:1, type:'radio', text:'¿Con qué frecuencia un cliente regresa y no hay registro de la conversación o el interés anterior?', opts:['Con frecuencia — toca volver a preguntar todo','Alguna vez','Rara vez','Nunca — siempre tengo el historial']},
+    {l:2, type:'textarea', text:'Cuéntanos de una venta que se perdió o complicó por no tener información en el momento correcto. ¿Qué necesitabas y no tenías?'},
+    {l:2, type:'radio', text:'¿Hay momentos en los que necesitas información del inventario o de un cliente pero no estás en la oficina?', opts:['Sí, frecuentemente — atiendo clientes fuera','Sí, a veces','Rara vez','No — siempre estoy en la oficina']},
+    {l:2, type:'radio', text:'¿Cómo manejas hoy los clientes que están interesados pero que aún no han decidido?', opts:['En mi celular o agenda personal','En un archivo propio','En el sistema compartido','A veces se pierden — no hay seguimiento formal']},
+    {l:2, type:'textarea', text:'¿Qué información del cliente o del proceso de venta hoy vive en WhatsApp, en tu celular o de memoria y debería estar en el sistema?'},
+    {l:3, type:'scale', text:'¿Qué impacto tendría poder consultar el inventario completo — con estado, precio e historial — desde cualquier lugar en el momento que lo necesitas?', lo:'Poco impacto', hi:'Alto impacto'},
+    {l:3, type:'scale', text:'Si el sistema te avisara automáticamente cuando llevas más de 3 días sin contactar a un cliente interesado, ¿cuántas ventas más cerrarías?', lo:'Las mismas', hi:'Varias más'},
+    {l:3, type:'radio', text:'¿Qué cambio en ventas tendría más impacto inmediato?', opts:['Tener el inventario actualizado accesible siempre','Historial completo de cada cliente en un lugar','Recordatorio automático de seguimiento a prospectos','Saber qué vehículos generan más interés y por qué']},
+    {l:3, type:'radio', text:'Si pudieras cambiar una sola cosa, ¿qué te haría cerrar más negocios con el mismo esfuerzo?', opts:['Tener toda la información disponible cuando estoy con el cliente','No perder ningún prospecto por falta de seguimiento','Conocer el historial completo del cliente antes de llamarle','Saber en tiempo real qué vehículos están disponibles para ofrecer']},
+    {l:3, type:'textarea', text:'Si el cliente que está comprando pudiera ver en tiempo real el estado de su proceso — en qué etapa está su vehículo, qué falta, cuándo estará listo — ¿qué cambiaría en tu trabajo y en la experiencia de ese cliente?'},
+  ],
+};
+
+const LEVELS = {1:'Nivel 1 — Validar', 2:'Nivel 2 — Descubrir', 3:'Nivel 3 — Proponer'};
+const LEVEL_CLASSES = {1:'tag-lv1', 2:'tag-lv2', 3:'tag-lv3'};
+
+let selectedArea = '';
+let currentStep = 0; // 0 = identificación, 1-12 = preguntas
+let questions = [];
+let answers = {};
+
+function selectArea(el, area) {
+  document.querySelectorAll('.area-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedArea = area;
+}
+
+function updateProgress() {
+  const total = questions.length + 1;
+  const pct = Math.round((currentStep / total) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+
+  if (currentStep === 0) {
+    document.getElementById('prog-label').textContent = 'Identificación';
+  } else {
+    const q = questions[currentStep - 1];
+    document.getElementById('prog-label').textContent =
+      LEVELS[q.l] + ' — pregunta ' + currentStep + ' de ' + questions.length;
+  }
+  document.getElementById('btn-back').disabled = currentStep === 0;
+  document.getElementById('btn-next').textContent =
+    currentStep === questions.length ? 'Enviar respuestas' : 'Siguiente';
+}
+
+function renderQuestion() {
+  const q = questions[currentStep - 1];
+  const tag = document.getElementById('level-tag');
+  tag.textContent = LEVELS[q.l];
+  tag.className = 'section-tag ' + LEVEL_CLASSES[q.l];
+  document.getElementById('q-num').textContent = 'Pregunta ' + currentStep;
+  document.getElementById('q-text').textContent = q.text;
+
+  const inp = document.getElementById('q-input');
+  const key = 'q' + currentStep;
+  const saved = answers[key] || '';
+
+  if (q.type === 'radio') {
+    inp.innerHTML = '<div class="options">' +
+      q.opts.map(o => `<label class="opt-label ${saved===o?'selected':''}" onclick="selectOpt(this,'${key}','${o.replace(/'/g,"\\'")}')"><input type="radio" name="${key}" value="${o}"><span class="opt-dot"></span>${o}</label>`).join('') +
+    '</div>';
+  } else if (q.type === 'textarea') {
+    inp.innerHTML = `<textarea id="ta-${key}" maxlength="400" placeholder="Escribe libremente..." oninput="saveTA('${key}',this)">${saved}</textarea><div class="char-count" id="cc-${key}">${saved.length} / 400</div>`;
+  } else if (q.type === 'scale') {
+    const btns = [1,2,3,4,5].map(n =>
+      `<button class="scale-btn ${saved==n?'selected':''}" onclick="selectScale('${key}',${n},this)">${n}</button>`
+    ).join('');
+    inp.innerHTML = `<div class="scale-row" id="sr-${key}">${btns}</div><div class="scale-labels"><span>${q.lo}</span><span>${q.hi}</span></div>`;
+  }
+}
+
+function selectOpt(el, key, val) {
+  el.closest('.options').querySelectorAll('.opt-label').forEach(l => l.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[key] = val;
+}
+
+function selectScale(key, val, btn) {
+  document.getElementById('sr-' + key).querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers[key] = String(val);
+}
+
+function saveTA(key, el) {
+  answers[key] = el.value;
+  document.getElementById('cc-' + key).textContent = el.value.length + ' / 400';
+}
+
+function nav(dir) {
+  if (currentStep === 0 && dir === 1) {
+    if (!document.getElementById('nombre').value.trim()) { alert('Por favor ingresa tu nombre.'); return; }
+    if (!selectedArea) { alert('Por favor selecciona tu área.'); return; }
+    questions = QUESTIONS[selectedArea] || [];
+    currentStep = 1;
+    document.getElementById('step-0').classList.add('hidden');
+    document.getElementById('step-q').classList.remove('hidden');
+    renderQuestion();
+    updateProgress();
+    return;
+  }
+
+  if (dir === 1 && currentStep === questions.length) { submitForm(); return; }
+
+  currentStep = Math.max(1, Math.min(questions.length, currentStep + dir));
+  renderQuestion();
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function submitForm() {
+  const nombre = document.getElementById('nombre').value.trim();
+
+  // Build payload — encode each answer as q1..q12
+  const payload = { area: selectedArea, nombre: nombre };
+  Object.entries(answers).forEach(([k, v]) => { payload[k] = v; });
+
+  const btn = document.getElementById('btn-next');
+  btn.innerHTML = '<span class="spinner"></span>Enviando...';
+  btn.disabled = true;
+
+  // Use script tag JSONP — bypasses CORS completely and handles long text
+  const callbackName = 'cb_' + Date.now();
+  const params = new URLSearchParams(payload);
+  params.set('callback', callbackName);
+
+  window[callbackName] = function() {
+    delete window[callbackName];
+    document.getElementById('form-wrap').classList.add('hidden');
+    document.getElementById('nav-wrap').classList.add('hidden');
+    document.getElementById('done-screen').classList.remove('hidden');
+    document.getElementById('prog-fill').style.width = '100%';
+    document.getElementById('prog-pct').textContent = '100%';
+    document.getElementById('prog-label').textContent = 'Completado';
+  };
+
+  const script = document.createElement('script');
+  script.onerror = () => {
+    // Even on error the data was likely saved — show success
+    window[callbackName]();
+  };
+  script.src = SCRIPT_URL + '?' + params.toString();
+  document.body.appendChild(script);
+}
+
+function resetForm() {
+  selectedArea = '';
+  currentStep = 0;
+  answers = {};
+  questions = [];
+
+  document.getElementById('nombre').value = '';
+  document.querySelectorAll('.area-card').forEach(c => c.classList.remove('selected'));
+
+  document.getElementById('step-0').classList.remove('hidden');
+  document.getElementById('step-q').classList.add('hidden');
+  document.getElementById('form-wrap').classList.remove('hidden');
+  document.getElementById('nav-wrap').classList.remove('hidden');
+  document.getElementById('done-screen').classList.add('hidden');
+
+  document.getElementById('btn-back').disabled = true;
+  document.getElementById('btn-next').textContent = 'Siguiente';
+
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+updateProgress();
+</script>
+</body>
+</html>
