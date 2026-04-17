@@ -553,9 +553,15 @@ function updateProgress() {
     document.getElementById('prog-label').textContent =
       LEVELS[q.l] + ' — pregunta ' + currentStep + ' de ' + questions.length;
   }
+  const btnNext = document.getElementById('btn-next');
   document.getElementById('btn-back').disabled = currentStep === 0;
-  document.getElementById('btn-next').textContent =
-    currentStep === questions.length ? 'Enviar respuestas' : 'Siguiente';
+  if (currentStep === 0) {
+    btnNext.textContent = 'Comenzar';
+  } else if (questions.length > 0 && currentStep === questions.length) {
+    btnNext.textContent = 'Enviar respuestas';
+  } else {
+    btnNext.textContent = 'Siguiente';
+  }
 }
 
 function renderQuestion() {
